@@ -1,13 +1,18 @@
 # ``DrawBox``
 
-<!--@START_MENU_TOKEN@-->Summary<!--@END_MENU_TOKEN@-->
+MapBox shape drawing and editing.
 
 ## Overview
 
-<!--@START_MENU_TOKEN@-->Text<!--@END_MENU_TOKEN@-->
+- Import and export geometry as well known text.
+- Display and edit imported geometry in a map view.
 
-## Topics
+- Draw new geometry by hand in map view.
+- Edit drawn geometry:
+    - Add verticies to geometry.
+    - Move verticies of the current geometry to change shape.
+    - Delete verticies from geometry.
+- Delete geometry.
 
-### <!--@START_MENU_TOKEN@-->Group<!--@END_MENU_TOKEN@-->
+- Auto drawing geometry lines following user location.
 
-- <!--@START_MENU_TOKEN@-->``Symbol``<!--@END_MENU_TOKEN@-->

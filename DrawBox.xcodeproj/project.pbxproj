@@ -9,12 +9,52 @@
 /* Begin PBXBuildFile section */
 		B107391027C02CBA0045B328 /* DrawBox.docc in Sources */ = {isa = PBXBuildFile; fileRef = B107390F27C02CBA0045B328 /* DrawBox.docc */; };
 		B107391127C02CBA0045B328 /* DrawBox.h in Headers */ = {isa = PBXBuildFile; fileRef = B107390E27C02CBA0045B328 /* DrawBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B107392827C02D410045B328 /* DrawBoxViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107391827C02D410045B328 /* DrawBoxViewModel.swift */; };
+		B107392927C02D410045B328 /* TrackingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107391927C02D410045B328 /* TrackingViewModel.swift */; };
+		B107392A27C02D410045B328 /* MapDisplayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107391A27C02D410045B328 /* MapDisplayViewModel.swift */; };
+		B107392B27C02D410045B328 /* TrackRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107391C27C02D410045B328 /* TrackRecorder.swift */; };
+		B107392C27C02D410045B328 /* CameraLocationConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107391D27C02D410045B328 /* CameraLocationConsumer.swift */; };
+		B107392D27C02D410045B328 /* GEOSwift2Turf.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107391E27C02D410045B328 /* GEOSwift2Turf.swift */; };
+		B107392E27C02D410045B328 /* THPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107391F27C02D410045B328 /* THPButton.swift */; };
+		B107392F27C02D410045B328 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107392027C02D410045B328 /* DraggableView.swift */; };
+		B107393027C02D410045B328 /* Turf2GEOSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107392127C02D410045B328 /* Turf2GEOSwift.swift */; };
+		B107393127C02D410045B328 /* MapFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107392227C02D410045B328 /* MapFunctions.swift */; };
+		B107393227C02D410045B328 /* DrawBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107392427C02D410045B328 /* DrawBoxView.swift */; };
+		B107393327C02D410045B328 /* MapDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107392527C02D410045B328 /* MapDisplayView.swift */; };
+		B107393427C02D410045B328 /* TrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107392627C02D410045B328 /* TrackingView.swift */; };
+		B107393527C02D410045B328 /* MapBoxViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107392727C02D410045B328 /* MapBoxViewWrapper.swift */; };
+		B107393B27C02D520045B328 /* Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107393627C02D510045B328 /* Init.swift */; };
+		B107393C27C02D520045B328 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107393727C02D510045B328 /* Info.swift */; };
+		B107393D27C02D520045B328 /* Draw.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107393827C02D510045B328 /* Draw.swift */; };
+		B107393E27C02D520045B328 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107393927C02D510045B328 /* Track.swift */; };
+		B107393F27C02D520045B328 /* Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107393A27C02D510045B328 /* Display.swift */; };
+		B107394227C02DC20045B328 /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = B107394127C02DC20045B328 /* MapboxMaps */; };
+		B107394527C02E050045B328 /* GEOSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B107394427C02E050045B328 /* GEOSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B107390B27C02CBA0045B328 /* DrawBox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DrawBox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B107390E27C02CBA0045B328 /* DrawBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrawBox.h; sourceTree = "<group>"; };
 		B107390F27C02CBA0045B328 /* DrawBox.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = DrawBox.docc; sourceTree = "<group>"; };
+		B107391827C02D410045B328 /* DrawBoxViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawBoxViewModel.swift; sourceTree = "<group>"; };
+		B107391927C02D410045B328 /* TrackingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingViewModel.swift; sourceTree = "<group>"; };
+		B107391A27C02D410045B328 /* MapDisplayViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapDisplayViewModel.swift; sourceTree = "<group>"; };
+		B107391C27C02D410045B328 /* TrackRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackRecorder.swift; sourceTree = "<group>"; };
+		B107391D27C02D410045B328 /* CameraLocationConsumer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraLocationConsumer.swift; sourceTree = "<group>"; };
+		B107391E27C02D410045B328 /* GEOSwift2Turf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GEOSwift2Turf.swift; sourceTree = "<group>"; };
+		B107391F27C02D410045B328 /* THPButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = THPButton.swift; sourceTree = "<group>"; };
+		B107392027C02D410045B328 /* DraggableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
+		B107392127C02D410045B328 /* Turf2GEOSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Turf2GEOSwift.swift; sourceTree = "<group>"; };
+		B107392227C02D410045B328 /* MapFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapFunctions.swift; sourceTree = "<group>"; };
+		B107392427C02D410045B328 /* DrawBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawBoxView.swift; sourceTree = "<group>"; };
+		B107392527C02D410045B328 /* MapDisplayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapDisplayView.swift; sourceTree = "<group>"; };
+		B107392627C02D410045B328 /* TrackingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingView.swift; sourceTree = "<group>"; };
+		B107392727C02D410045B328 /* MapBoxViewWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBoxViewWrapper.swift; sourceTree = "<group>"; };
+		B107393627C02D510045B328 /* Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Init.swift; sourceTree = "<group>"; };
+		B107393727C02D510045B328 /* Info.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
+		B107393827C02D510045B328 /* Draw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Draw.swift; sourceTree = "<group>"; };
+		B107393927C02D510045B328 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
+		B107393A27C02D510045B328 /* Display.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Display.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -22,6 +62,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B107394527C02E050045B328 /* GEOSwift in Frameworks */,
+				B107394227C02DC20045B328 /* MapboxMaps in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,6 +74,9 @@
 			isa = PBXGroup;
 			children = (
 				B107390D27C02CBA0045B328 /* DrawBox */,
+				B107392327C02D410045B328 /* Views */,
+				B107391727C02D410045B328 /* ViewModels */,
+				B107391B27C02D410045B328 /* Support */,
 				B107390C27C02CBA0045B328 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,10 +92,50 @@
 		B107390D27C02CBA0045B328 /* DrawBox */ = {
 			isa = PBXGroup;
 			children = (
+				B107393A27C02D510045B328 /* Display.swift */,
+				B107393827C02D510045B328 /* Draw.swift */,
+				B107393727C02D510045B328 /* Info.swift */,
+				B107393627C02D510045B328 /* Init.swift */,
+				B107393927C02D510045B328 /* Track.swift */,
 				B107390E27C02CBA0045B328 /* DrawBox.h */,
 				B107390F27C02CBA0045B328 /* DrawBox.docc */,
 			);
 			path = DrawBox;
+			sourceTree = "<group>";
+		};
+		B107391727C02D410045B328 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B107391827C02D410045B328 /* DrawBoxViewModel.swift */,
+				B107391927C02D410045B328 /* TrackingViewModel.swift */,
+				B107391A27C02D410045B328 /* MapDisplayViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		B107391B27C02D410045B328 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				B107391C27C02D410045B328 /* TrackRecorder.swift */,
+				B107391D27C02D410045B328 /* CameraLocationConsumer.swift */,
+				B107391E27C02D410045B328 /* GEOSwift2Turf.swift */,
+				B107391F27C02D410045B328 /* THPButton.swift */,
+				B107392027C02D410045B328 /* DraggableView.swift */,
+				B107392127C02D410045B328 /* Turf2GEOSwift.swift */,
+				B107392227C02D410045B328 /* MapFunctions.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		B107392327C02D410045B328 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B107392427C02D410045B328 /* DrawBoxView.swift */,
+				B107392527C02D410045B328 /* MapDisplayView.swift */,
+				B107392627C02D410045B328 /* TrackingView.swift */,
+				B107392727C02D410045B328 /* MapBoxViewWrapper.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -81,6 +166,10 @@
 			dependencies = (
 			);
 			name = DrawBox;
+			packageProductDependencies = (
+				B107394127C02DC20045B328 /* MapboxMaps */,
+				B107394427C02E050045B328 /* GEOSwift */,
+			);
 			productName = DrawBox;
 			productReference = B107390B27C02CBA0045B328 /* DrawBox.framework */;
 			productType = "com.apple.product-type.framework";
@@ -108,6 +197,10 @@
 				Base,
 			);
 			mainGroup = B107390127C02CBA0045B328;
+			packageReferences = (
+				B107394027C02DC20045B328 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
+				B107394327C02E050045B328 /* XCRemoteSwiftPackageReference "GEOSwift" */,
+			);
 			productRefGroup = B107390C27C02CBA0045B328 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -132,7 +225,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B107393327C02D410045B328 /* MapDisplayView.swift in Sources */,
+				B107392B27C02D410045B328 /* TrackRecorder.swift in Sources */,
+				B107393127C02D410045B328 /* MapFunctions.swift in Sources */,
+				B107393D27C02D520045B328 /* Draw.swift in Sources */,
+				B107393E27C02D520045B328 /* Track.swift in Sources */,
+				B107393227C02D410045B328 /* DrawBoxView.swift in Sources */,
+				B107392C27C02D410045B328 /* CameraLocationConsumer.swift in Sources */,
+				B107392E27C02D410045B328 /* THPButton.swift in Sources */,
+				B107392F27C02D410045B328 /* DraggableView.swift in Sources */,
+				B107393427C02D410045B328 /* TrackingView.swift in Sources */,
+				B107393F27C02D520045B328 /* Display.swift in Sources */,
+				B107392A27C02D410045B328 /* MapDisplayViewModel.swift in Sources */,
+				B107393B27C02D520045B328 /* Init.swift in Sources */,
+				B107392827C02D410045B328 /* DrawBoxViewModel.swift in Sources */,
+				B107392927C02D410045B328 /* TrackingViewModel.swift in Sources */,
+				B107393027C02D410045B328 /* Turf2GEOSwift.swift in Sources */,
+				B107393527C02D410045B328 /* MapBoxViewWrapper.swift in Sources */,
+				B107392D27C02D410045B328 /* GEOSwift2Turf.swift in Sources */,
 				B107391027C02CBA0045B328 /* DrawBox.docc in Sources */,
+				B107393C27C02D520045B328 /* Info.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +395,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alpine-lis.DrawBox";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -311,6 +424,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alpine-lis.DrawBox";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -339,6 +453,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B107394027C02DC20045B328 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.3.0;
+			};
+		};
+		B107394327C02E050045B328 /* XCRemoteSwiftPackageReference "GEOSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/GEOSwift/GEOSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B107394127C02DC20045B328 /* MapboxMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B107394027C02DC20045B328 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
+			productName = MapboxMaps;
+		};
+		B107394427C02E050045B328 /* GEOSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B107394327C02E050045B328 /* XCRemoteSwiftPackageReference "GEOSwift" */;
+			productName = GEOSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B107390227C02CBA0045B328 /* Project object */;
 }
