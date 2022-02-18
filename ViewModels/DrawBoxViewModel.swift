@@ -9,7 +9,7 @@ import MapboxMaps
 
 class DrawBoxViewModel: ObservableObject {
     
-    var drawBox = DrawBox()
+    @Published var drawBox = DrawBox()
     
     @Published var startedDrawing = false
     @Published var startedEditing = false
@@ -17,6 +17,7 @@ class DrawBoxViewModel: ObservableObject {
     @Published var vertexSelected = false
     @Published var deleteVertices = false
     @Published var showAlert = false
+    
     
     var deleteText: String = ""
     

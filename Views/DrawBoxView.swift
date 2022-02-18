@@ -51,6 +51,7 @@ public struct DrawBoxView: View {
         .onDisappear {
             viewModel.onDisappear()
             if viewModel.checkChanges() {
+                geometry = viewModel.saveGeometry()
                 changes = true
             }
         }

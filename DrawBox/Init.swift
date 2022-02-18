@@ -5,8 +5,6 @@
 //  Created by Jenya Lebid on 2/17/22.
 //
 
-import Foundation
-import SwiftUI
 import MapboxMaps
 
 enum DrawMode: Int {

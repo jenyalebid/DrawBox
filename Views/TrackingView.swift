@@ -15,13 +15,18 @@ public struct TrackingView: View {
     @State var showDeleteAlert = false
     @State var buttonColor = Color.blue
     @State var buttonText = "Start Tracking"
-
+    
+    @Binding var changes: Bool
+    @Binding var geometry: String?
+    
     var formId: String
-    var geometry: String?
 
-    public init(geometry: String? = nil, formId: String) {
+
+    public init(geometry: Binding<String?>?, formId: String, chnages: Binding<Bool>) {
         self.formId = formId
-        viewModel = TrackingViewModel(geometry: geometry, formId: formId)
+        self._geometry = geometry ?? Binding.constant(nil)
+        self._changes = chnages
+        viewModel = TrackingViewModel(geometry: "\(String(describing: geometry))", formId: formId)
     }
 
     public var body: some View {
@@ -101,12 +106,8 @@ public struct TrackingView: View {
                 Button {
                     viewModel.startedTracking = false
                     viewModel.trackingChanged()
-//                    formViewModel.field.geometry = viewModel.getRecordedTrack()
-//
-//                    DispatchQueue.main.async {
-//                        formViewModel.save(managedObjectContext: Database.shared._mainContext)
-//                        form.edited = true
-//                    }
+                    geometry = viewModel.getRecordedTrack()
+                    changes = true
                 } label: {
                     Text(viewModel.buttonText().text)
                 }
