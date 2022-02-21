@@ -22,7 +22,7 @@ struct MapBoxViewWrapper: UIViewControllerRepresentable {
 public class MapViewController: UIViewController {
     internal var viewModel: MapDisplayViewModel!
     
-    convenience init(viewModel: MapDisplayViewModel, drawBox: DrawBox? = nil) {
+    convenience init(viewModel: MapDisplayViewModel) {
         self.init()
         self.viewModel = viewModel
     }

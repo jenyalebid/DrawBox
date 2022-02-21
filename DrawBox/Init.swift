@@ -20,16 +20,17 @@ public class InitBox: NSObject, ObservableObject {
     
     weak var mapView: MapView!
     
+    @Published var isEditingStarted = false
     @Published var isFeatureSelected = false
+    @Published var isFeatureDeleting = false
     @Published var isVertexSelected = false
-    @Published var deletingFeature = false
+    @Published var isVertexDeleting = false
+    @Published var isVertexAdding = false
     
     //MARK: Helper Variables
     internal var currentMode = DrawMode.dmNONE
     var isDrawModeEnabled = false
     var isDrawingValid = false
-    var removeVertices = false
-    var isEditModeEnabled = false
     var isMapViewOpen = false
     var isTrackFeatureCreated = false
     var isGeometryChanged = false

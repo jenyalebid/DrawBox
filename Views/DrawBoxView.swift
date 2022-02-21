@@ -36,11 +36,11 @@ public struct DrawBoxView: View {
                 }
                 else {
                     HStack(spacing: 10) {
-                        MapButton(voidAction: viewModel.editing, highlighted: viewModel.startedEditing, label: "Editing", image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
+                        MapButton(voidAction: viewModel.editing, highlighted: viewModel.drawBox.isEditingStarted, label: "Editing", image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
                         MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", defaultColor: Color.white, selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
                         
-                        if viewModel.startedEditing && drawType != "Point" {
-                            MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.startedAdding, label: "Vertices", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
+                        if viewModel.drawBox.isEditingStarted && drawType != "Point" {
+                            MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.drawBox.isVertexAdding, label: "Vertices", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
                         }
                     }
                     .padding()
@@ -86,7 +86,7 @@ struct MapButton: View {
                 voidAction()
                 
             }
-            if viewModel.showAlert {
+            if viewModel.drawBox.isFeatureDeleting {
                 showAlert = true
             }
         } label: {
@@ -108,7 +108,7 @@ struct MapButton: View {
                     viewModel.deleteFeature()
                 }),
                 secondaryButton: .cancel(Text("Cancel"), action: {
-                    return
+                    viewModel.drawBox.isFeatureDeleting = false
                 })
             )
         }

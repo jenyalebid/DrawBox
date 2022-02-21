@@ -50,6 +50,7 @@ public class DrawBox: DisplayBox {
             createFeatureFromTrackRecorded()
             break
         case .dmEditAddVertex:
+            isVertexAdding = true
 //            setCurrentVertex(vertexFeature: nil)
             break
         case .dmNONE:
@@ -73,6 +74,7 @@ public class DrawBox: DisplayBox {
                 // removeLines()
             }
         case .dmEditAddVertex:
+            isVertexAdding = false
             break
         case .dmNONE:
             return
@@ -89,7 +91,7 @@ public class DrawBox: DisplayBox {
                 drawModeTapHandler(gesture)
                 return
             }
-            if isEditModeEnabled {
+            if isEditingStarted {
                 findEditingVertex(gesture)
                 return
             }
@@ -216,7 +218,7 @@ public class DrawBox: DisplayBox {
             default:
                 return
             }
-            isEditModeEnabled = true
+            isEditingStarted = true
         }
         updateMapSupportPoints()
     }
@@ -293,7 +295,7 @@ public class DrawBox: DisplayBox {
                         if self.isLongStarted {
                             self.startVertexOffset(position: tapPoint)
                         } else {
-                            if self.removeVertices {
+                            if self.isVertexDeleting {
                                 self.deleteFeaturePoint()
                             }
                         }
@@ -404,7 +406,7 @@ public class DrawBox: DisplayBox {
     func deleteSelectedFeature() {
         guard selectedFeature != nil else { return }
         isGeometryChanged = true
-        deletingFeature = true
+        isFeatureDeleting = true
         let idx = getFeatureIndex(feature: selectedFeature!)
         switch selectedFeature?.geometry {
         case .point:
@@ -540,11 +542,11 @@ public class DrawBox: DisplayBox {
     }
     
     func clearEditingVertex() {
-        isFeatureSelected = false
-        removeVertices = false
+//        isFeatureSelected = false
+        isVertexDeleting = false
         isVertexSelected = false
-        isEditModeEnabled = false
-        deletingFeature = false
+        isEditingStarted = false
+        isFeatureDeleting = false
         removeSupportPoints()
     }
 }
