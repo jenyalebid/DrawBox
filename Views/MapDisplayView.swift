@@ -16,10 +16,16 @@ public struct MapDisplayView: View {
     }
     
     public var body: some View {
-        ZStack(alignment: .bottomTrailing) {
+        ZStack {
             MapBoxViewWrapper(viewModel: viewModel).ignoresSafeArea(.container, edges: [.leading, .trailing])
-            LocationButton(highlighted: viewModel.startedLocation, action: viewModel.locationChange)
-                .padding([.bottom, .trailing], 8.0)
+            HStack {
+                if viewModel.featureSelected() {
+                    InfoPanelView().environmentObject(viewModel)
+                }
+                Spacer()
+                LocationButton(highlighted: viewModel.startedLocation, action: viewModel.locationChange)
+                    .padding([.bottom, .trailing], 8.0)
+            }
         }
     }
 }
@@ -42,3 +48,9 @@ struct LocationButton: View {
         }
     }
 }
+
+//struct MapDisplayView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MapDisplayView()
+//    }
+//}

@@ -30,6 +30,7 @@
 		B107393F27C02D520045B328 /* Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107393A27C02D510045B328 /* Display.swift */; };
 		B107394227C02DC20045B328 /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = B107394127C02DC20045B328 /* MapboxMaps */; };
 		B107394527C02E050045B328 /* GEOSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B107394427C02E050045B328 /* GEOSwift */; };
+		B177400D27C45EE7001FE140 /* InfoPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B177400C27C45EE7001FE140 /* InfoPanelView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		B107393927C02D510045B328 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		B107393A27C02D510045B328 /* Display.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Display.swift; sourceTree = "<group>"; };
 		B107394727C040CA0045B328 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B177400C27C45EE7001FE140 /* InfoPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPanelView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				B107392027C02D410045B328 /* DraggableView.swift */,
 				B107392127C02D410045B328 /* Turf2GEOSwift.swift */,
 				B107392227C02D410045B328 /* MapFunctions.swift */,
+				B177400C27C45EE7001FE140 /* InfoPanelView.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				B107392927C02D410045B328 /* TrackingViewModel.swift in Sources */,
 				B107393027C02D410045B328 /* Turf2GEOSwift.swift in Sources */,
 				B107393527C02D410045B328 /* MapBoxViewWrapper.swift in Sources */,
+				B177400D27C45EE7001FE140 /* InfoPanelView.swift in Sources */,
 				B107392D27C02D410045B328 /* GEOSwift2Turf.swift in Sources */,
 				B107391027C02CBA0045B328 /* DrawBox.docc in Sources */,
 				B107393C27C02D520045B328 /* Info.swift in Sources */,

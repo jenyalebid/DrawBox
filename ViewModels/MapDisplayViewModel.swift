@@ -6,26 +6,51 @@
 //
 
 import MapboxMaps
+import Combine
 
 class MapDisplayViewModel: ObservableObject {
     
     var mapView: MapView!
+    var geometry: String?
     
+    @Published var displayBox: DisplayBox?
+    @Published var drawBox: DrawBox?
+    
+    @Published var startedLocation = false
+
     internal var cameraLocationConsumer: CameraLocationConsumer?
     
     private var moveToLocation = false
-    var geometry: String?
-    var drawBox: DrawBox?
-    @Published var startedLocation = false
+    private var cancellables = Set<AnyCancellable>()
     
     init(geometry: String? = nil, drawBox: DrawBox? = nil, moveToLocation: Bool = false) {
         self.geometry = geometry
         self.drawBox = drawBox
         self.moveToLocation = moveToLocation
         
+        if drawBox != nil {
+            drawBox!.objectWillChange
+                .sink(receiveValue: { self.objectWillChange.send() })
+                .store(in: &cancellables)
+        }
+        else {
+            displayBox = DisplayBox()
+            displayBox!.objectWillChange
+                .sink(receiveValue: { self.objectWillChange.send() })
+                .store(in: &cancellables)
+        }
+        
         if drawBox?.mapView != nil {
             self.mapView = drawBox?.mapView
         }
+    }
+    
+    func featureSelected() -> Bool {
+        if drawBox != nil {
+            return drawBox!.isFeatureSelected
+        }
+        
+        return displayBox!.isFeatureSelected
     }
     
     func onMapLoaded() {
@@ -42,14 +67,6 @@ class MapDisplayViewModel: ObservableObject {
             _locationManager.requestWhenInUseAuthorization()
             _locationManager.startUpdatingLocation()
             moveCamera2Location(_locationManager.location)
-//            cameraLocationConsumer = CameraLocationConsumer(mapView: mapView)
-//            mapView.location.addLocationConsumer(newConsumer: cameraLocationConsumer!)
-//            DispatchQueue.main.asyncAfter(deadline: .now()+1) { [weak self] in
-//                if let self = self, self.cameraLocationConsumer != nil {
-//                    self.mapView.location.removeLocationConsumer(consumer: self.cameraLocationConsumer!)
-//                    self.cameraLocationConsumer = nil
-//                }
-//            }
         }
     }
     
