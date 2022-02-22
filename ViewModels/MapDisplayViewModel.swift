@@ -13,49 +13,40 @@ class MapDisplayViewModel: ObservableObject {
     var mapView: MapView!
     var geometry: String?
     
-    @Published var displayBox: DisplayBox?
-//    @Published var drawBox: DrawBox?
-    
+    @Published var displayBox: DisplayBox
     @Published var startedLocation = false
 
-    internal var cameraLocationConsumer: CameraLocationConsumer?
-    
     private var moveToLocation = false
     private var cancellables = Set<AnyCancellable>()
     
     init(geometry: String? = nil, drawBox: DrawBox? = nil, moveToLocation: Bool = false) {
         self.geometry = geometry
-//        self.drawBox = drawBox
         self.moveToLocation = moveToLocation
         
         if drawBox != nil {
-            self.displayBox = drawBox
+            self.displayBox = drawBox!
+            
             drawBox!.objectWillChange
                 .sink(receiveValue: { self.objectWillChange.send() })
                 .store(in: &cancellables)
         }
         else {
             displayBox = DisplayBox()
-            displayBox!.objectWillChange
+            displayBox.objectWillChange
                 .sink(receiveValue: { self.objectWillChange.send() })
                 .store(in: &cancellables)
         }
         
-        if drawBox?.mapView != nil {
-            self.mapView = drawBox?.mapView
-        }
+        self.mapView = displayBox.mapView
+        startedLocation = displayBox.locationTracking
     }
     
     func featureSelected() -> Bool {
-//        if drawBox != nil {
-//            return drawBox!.isFeatureSelected
-//        }
-        
-        return displayBox!.isFeatureSelected
+        return displayBox.isFeatureSelected
     }
     
     func onMapLoaded() {
-        displayBox?.prepare()
+        displayBox.prepare()
         if geometry != nil {
             if displayBox is DrawBox {
                 showDrawnGeometry()
@@ -92,14 +83,16 @@ class MapDisplayViewModel: ObservableObject {
     }
     
     func locationChange() {
-        startedLocation.toggle()
         guard mapView != nil else { return }
+        startedLocation.toggle()
         if startedLocation {
-            cameraLocationConsumer = CameraLocationConsumer(mapView: mapView)
-            mapView.location.addLocationConsumer(newConsumer: cameraLocationConsumer!)
+            displayBox.locationTracking = true
+            displayBox.cameraLocationConsumer = CameraLocationConsumer(mapView: mapView)
+            mapView.location.addLocationConsumer(newConsumer: displayBox.cameraLocationConsumer!)
         } else {
-            mapView.location.removeLocationConsumer(consumer: cameraLocationConsumer!)
-            cameraLocationConsumer = nil
+            mapView.location.removeLocationConsumer(consumer: displayBox.cameraLocationConsumer!)
+            displayBox.cameraLocationConsumer = nil
+            displayBox.locationTracking = false
         }
     }
     
@@ -165,6 +158,6 @@ class MapDisplayViewModel: ObservableObject {
         default:
             assertionFailure()
         }
-        displayBox!.loadFeatures(features: features)
+        displayBox.loadFeatures(features: features)
     }
 }

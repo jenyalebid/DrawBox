@@ -16,16 +16,17 @@ public struct MapDisplayView: View {
     }
     
     public var body: some View {
-        ZStack {
+        ZStack(alignment: .trailing) {
             MapBoxViewWrapper(viewModel: viewModel).ignoresSafeArea(.container, edges: [.leading, .trailing])
-            HStack {
-                if viewModel.featureSelected() {
-                    InfoPanelView()//.environmentObject(viewModel)
+            VStack(alignment: .trailing) {
+                    if viewModel.featureSelected() {
+                        InfoPanelView().environmentObject(viewModel)
+                            .padding(.top, 45)
+                    }
+                    Spacer()
+                LocationButton(highlighted: viewModel.displayBox.locationTracking, action: viewModel.locationChange)
+                        .padding([.bottom, .trailing], 8.0)
                 }
-                Spacer()
-                LocationButton(highlighted: viewModel.startedLocation, action: viewModel.locationChange)
-                    .padding([.bottom, .trailing], 8.0)
-            }
         }
     }
 }
@@ -40,10 +41,10 @@ struct LocationButton: View {
             action()
         } label: {
             if highlighted {
-                Image(systemName: "location.fill").font(.title2)
+                Image(systemName: "location.fill").font(.title)
             }
             else {
-                Image(systemName: "location").font(.title2)
+                Image(systemName: "location").font(.title)
             }
         }
     }

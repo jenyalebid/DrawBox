@@ -13,6 +13,7 @@ class DrawBoxViewModel: ObservableObject {
     @Published var drawBox = DrawBox()
     
     @Published var startedDrawing = false
+    @Published var location = false
 //    @Published var startedEditing = false
 //    @Published var startedAdding = false
 //    @Published var vertexSelected = false

@@ -27,6 +27,9 @@ public class InitBox: NSObject, ObservableObject {
     @Published var isVertexDeleting = false
     @Published var isVertexAdding = false
     
+    var locationTracking = false
+    var cameraLocationConsumer: CameraLocationConsumer?
+    
     //MARK: Helper Variables
     internal var currentMode = DrawMode.dmNONE
     var isDrawModeEnabled = false

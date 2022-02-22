@@ -15,7 +15,14 @@ struct InfoPanelView: View {
     
     var body: some View {
         ZStack {
-            HStack {
+            HStack(spacing: 0) {
+                Button {
+                    panelWidth = (panelWidth == 0 ? 240 : 0)
+                } label: {
+                    Image(systemName: "control")
+                        .font(.title)
+                        .rotationEffect(.degrees(panelWidth > 60 ? 90 : -90))
+                }
                 if panelWidth > 200 {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Geometry Information").foregroundColor(Color.black)
@@ -25,19 +32,12 @@ struct InfoPanelView: View {
                     .padding(8.0)
                     Spacer()
                 }
-                Button {
-                    panelWidth = (panelWidth == 0 ? 240 : 0)
-                } label: {
-                    Image(systemName: "control")
-                        .font(.title)
-                        .rotationEffect(.degrees(panelWidth > 60 ? 90 : -90))
-                }
             }
         }
-        .frame(width: (panelWidth >= 30 ? panelWidth : 30), height: 200, alignment: .leading)
+        .frame(width: (panelWidth >= 30 ? panelWidth : 30), height: 200)
         .background(Color.white)
-        .cornerRadius(10, corners: [.topRight, .bottomRight])
-        .cornerRadius(panelWidth > 30 ? 10 : 0, corners: [.topLeft, .bottomLeft])
+        .cornerRadius(10, corners: [.topLeft, .bottomLeft])
+        .cornerRadius(panelWidth > 30 ? 10 : 0, corners: [.topRight, .bottomRight])
         .padding(.horizontal, panelWidth > 30 ? 12 : 0)
         .padding(.vertical)
         .animation(.easeIn, value: panelWidth)
@@ -47,7 +47,7 @@ struct InfoPanelView: View {
                     panelWidth = gesture.translation.width
                 }
                 .onEnded { _ in
-                    if panelWidth < -10 {
+                    if panelWidth > -150 {
                         panelWidth = 0
                     }
                     else {
