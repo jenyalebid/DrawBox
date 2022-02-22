@@ -117,7 +117,7 @@ public class DrawBox: DisplayBox {
         }
     }
     
-    func clear() {
+    override func clear() {
         if currentMode == .dmAddShape {
             stopDrawMode(.dmAddShape)
         }

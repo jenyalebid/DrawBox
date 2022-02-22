@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InfoPanelView: View {
     
-    @EnvironmentObject var displayViewModel: MapDisplayViewModel
+//    @EnvironmentObject var displayViewModel: MapDisplayViewModel
     
     @State private var panelWidth = 0.0
     
@@ -18,7 +18,7 @@ struct InfoPanelView: View {
             HStack {
                 if panelWidth > 200 {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Geometry Information")
+                        Text("Geometry Information").foregroundColor(Color.black)
 //                        Text("\(displayViewModel.drawBox?.selectedFeature?.identifier!)")
                         Spacer()
                     }

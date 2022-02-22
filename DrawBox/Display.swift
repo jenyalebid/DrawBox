@@ -16,6 +16,9 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
         isFeatureSelected = false
     }
     
+    func clear() {
+    }
+    
     //MARK: - Make Sources
     
     func makeSelectionSource() {

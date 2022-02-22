@@ -41,7 +41,7 @@ public class MapViewController: UIViewController {
         viewModel.mapView.ornaments.options.attributionButton.margins = CGPoint(x: 0, y: -12)
 //        viewModel.mapView.ornaments.options.logo.margins = CGPoint(x: 42, y: 8)
         self.view.addSubview(viewModel.mapView)
-        viewModel.drawBox?.mapView = viewModel.mapView
+        viewModel.displayBox?.mapView = viewModel.mapView
         viewModel.mapView.location.options.puckType = .puck2D()
         viewModel.mapView.mapboxMap.onNext(.mapLoaded) { _ in
             self.viewModel.onMapLoaded()
@@ -50,7 +50,7 @@ public class MapViewController: UIViewController {
     
     override public func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        viewModel.drawBox?.clear()
+        viewModel.displayBox?.clear()
     }
     
     override public func viewDidDisappear(_ animated: Bool) {

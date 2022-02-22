@@ -14,7 +14,7 @@ class MapDisplayViewModel: ObservableObject {
     var geometry: String?
     
     @Published var displayBox: DisplayBox?
-    @Published var drawBox: DrawBox?
+//    @Published var drawBox: DrawBox?
     
     @Published var startedLocation = false
 
@@ -25,10 +25,11 @@ class MapDisplayViewModel: ObservableObject {
     
     init(geometry: String? = nil, drawBox: DrawBox? = nil, moveToLocation: Bool = false) {
         self.geometry = geometry
-        self.drawBox = drawBox
+//        self.drawBox = drawBox
         self.moveToLocation = moveToLocation
         
         if drawBox != nil {
+            self.displayBox = drawBox
             drawBox!.objectWillChange
                 .sink(receiveValue: { self.objectWillChange.send() })
                 .store(in: &cancellables)
@@ -46,17 +47,17 @@ class MapDisplayViewModel: ObservableObject {
     }
     
     func featureSelected() -> Bool {
-        if drawBox != nil {
-            return drawBox!.isFeatureSelected
-        }
+//        if drawBox != nil {
+//            return drawBox!.isFeatureSelected
+//        }
         
         return displayBox!.isFeatureSelected
     }
     
     func onMapLoaded() {
-        drawBox?.prepare()
+        displayBox?.prepare()
         if geometry != nil {
-            if drawBox != nil {
+            if displayBox is DrawBox {
                 showDrawnGeometry()
             } else {
                 showGeometry()
@@ -164,6 +165,6 @@ class MapDisplayViewModel: ObservableObject {
         default:
             assertionFailure()
         }
-        drawBox!.loadFeatures(features: features)
+        displayBox!.loadFeatures(features: features)
     }
 }

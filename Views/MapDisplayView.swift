@@ -20,7 +20,7 @@ public struct MapDisplayView: View {
             MapBoxViewWrapper(viewModel: viewModel).ignoresSafeArea(.container, edges: [.leading, .trailing])
             HStack {
                 if viewModel.featureSelected() {
-                    InfoPanelView().environmentObject(viewModel)
+                    InfoPanelView()//.environmentObject(viewModel)
                 }
                 Spacer()
                 LocationButton(highlighted: viewModel.startedLocation, action: viewModel.locationChange)
