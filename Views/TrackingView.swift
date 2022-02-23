@@ -94,7 +94,7 @@ public struct TrackingView: View {
                         )
                     }
                 }
-                MapDisplayView(geometry: geometry, drawBox: viewModel.drawBox, moveToLocation: true)
+                MapDisplayView(geometry: geometry, drawBox: viewModel.drawBox)
                     .onAppear {
                         viewModel.startedTracking = true
                         viewModel.trackingChanged()

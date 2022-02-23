@@ -84,6 +84,9 @@ extension DisplayBox: GestureManagerDelegate {
     
     public func gestureManager(_ gestureManager: GestureManager, didBegin gestureType: GestureType) {
         print("\(gestureType) didBegin")
+        if gestureType == .pan && locationTracking {
+            stopTracking()
+        }
     }
     
     public func gestureManager(_ gestureManager: GestureManager, didEnd gestureType: GestureType, willAnimate: Bool) {
@@ -95,5 +98,19 @@ extension DisplayBox: GestureManagerDelegate {
     
     public func gestureManager(_ gestureManager: GestureManager, didEndAnimatingFor gestureType: GestureType) {
         print("didEndAnimatingFor \(gestureType)")
+    }
+    
+    func startTacking() {
+        locationTracking = true
+        cameraLocationConsumer = CameraLocationConsumer(mapView: mapView)
+        mapView.location.addLocationConsumer(newConsumer: cameraLocationConsumer!)
+    }
+    
+    func stopTracking() {
+        if locationTracking {
+            locationTracking = false
+            mapView.location.removeLocationConsumer(consumer: cameraLocationConsumer!)
+            cameraLocationConsumer = nil
+        }
     }
 }

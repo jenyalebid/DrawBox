@@ -14,11 +14,6 @@ class DrawBoxViewModel: ObservableObject {
     
     @Published var startedDrawing = false
     @Published var location = false
-//    @Published var startedEditing = false
-//    @Published var startedAdding = false
-//    @Published var vertexSelected = false
-//    @Published var deleteVertices = false
-//    @Published var showAlert = false
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -38,11 +33,8 @@ class DrawBoxViewModel: ObservableObject {
         drawBox.objectWillChange
             .sink(receiveValue: { self.objectWillChange.send() })
             .store(in: &cancellables)
+        
         drawBox.isDrawModeEnabled = true
-//        self.vertexSelected = drawBox.isVertexSelected
-//        self.startedEditing = drawBox.isEditModeEnabled
-//        self.deleteVertices = drawBox.removeVertices
-//        self.showAlert = drawBox.deletingFeature
         
         if drawBox.isVertexDeleting {
             currentButtonMode = .deleteMode
@@ -144,11 +136,11 @@ class DrawBoxViewModel: ObservableObject {
     func deleteType() -> Bool {
         if drawBox.isVertexSelected {
             drawBox.changeMode(.dmNONE)
-            deleteText = "Delete Vertex"
+            deleteText = "Vertex"
             return true
         }
         else if drawBox.isVertexDeleting {
-            deleteText = "Delete Mode"
+            deleteText = "Mode"
             return true
         }
         return false

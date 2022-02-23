@@ -28,8 +28,8 @@ public class MapViewController: UIViewController {
     }
     
     override public func viewDidLoad() {
-        print(#function)
-        super.viewDidLoad()        
+        super.viewDidLoad()
+    
         let resourceOptions = ResourceOptions(accessToken: "pk.eyJ1IjoiamVueWFsZWJpZCIsImEiOiJja3Y2dDZ2cnQyZDUzMm9xMXl2enR0ODJxIn0.CADXy6tenwyGeBU9Yimv5A")
         let cameraOptions = CameraOptions(center: CLLocationCoordinate2D(latitude: 44.0582, longitude: -121.3153), zoom: 5)
         let mapOptions = MapOptions(optimizeForTerrain: true)
@@ -37,11 +37,10 @@ public class MapViewController: UIViewController {
         viewModel.mapView = MapView(frame: view.bounds, mapInitOptions: myMapInitOptions)
         viewModel.mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         viewModel.mapView.ornaments.options.scaleBar.margins = CGPoint(x: 42, y: 8)
-//        viewModel.mapView.ornaments.options.compass.position = .topLeft
         viewModel.mapView.ornaments.options.attributionButton.position = .topLeft
         viewModel.mapView.ornaments.options.attributionButton.margins = CGPoint(x: 0, y: -12)
-//        viewModel.mapView.ornaments.options.logo.margins = CGPoint(x: 42, y: 8)
         self.view.addSubview(viewModel.mapView)
+        
         viewModel.displayBox.mapView = viewModel.mapView
         viewModel.mapView.location.options.puckType = .puck2D()
         viewModel.mapView.mapboxMap.onNext(.mapLoaded) { _ in

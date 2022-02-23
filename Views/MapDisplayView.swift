@@ -11,22 +11,25 @@ public struct MapDisplayView: View {
     
     @ObservedObject var viewModel: MapDisplayViewModel
     
-    public init(geometry: String? = nil, drawBox: DrawBox? = nil, moveToLocation: Bool = false) {
-        viewModel = MapDisplayViewModel(geometry: geometry, drawBox: drawBox, moveToLocation: moveToLocation)
+    public init(geometry: String? = nil, drawBox: DrawBox? = nil, displayBox: DisplayBox? = nil) {
+        viewModel = MapDisplayViewModel(geometry: geometry, drawBox: drawBox, displayBox: displayBox)
     }
     
     public var body: some View {
         ZStack(alignment: .trailing) {
             MapBoxViewWrapper(viewModel: viewModel).ignoresSafeArea(.container, edges: [.leading, .trailing])
-            VStack(alignment: .trailing) {
-                    if viewModel.featureSelected() {
-                        InfoPanelView().environmentObject(viewModel)
-                            .padding(.top, 45)
-                    }
-                    Spacer()
-                LocationButton(highlighted: viewModel.displayBox.locationTracking, action: viewModel.locationChange)
-                        .padding([.bottom, .trailing], 8.0)
+                .onDisappear {
+                    viewModel.displayBox.stopTracking()
                 }
+            VStack(alignment: .trailing) {
+                if viewModel.featureSelected() {
+                    InfoPanelView().environmentObject(viewModel)
+                        .padding(.top, 45)
+                }
+                Spacer()
+                LocationButton(highlighted: viewModel.displayBox.locationTracking, action: viewModel.moveToUserLocation)
+                    .padding([.bottom, .trailing], 8.0)
+            }
         }
     }
 }
@@ -41,12 +44,14 @@ struct LocationButton: View {
             action()
         } label: {
             if highlighted {
-                Image(systemName: "location.fill").font(.title)
+                Image(systemName: "location.fill").font(.headline)
             }
             else {
-                Image(systemName: "location").font(.title)
+                Image(systemName: "location").font(.headline)
             }
         }
+        .padding(8.0)
+        .background(Color.white).cornerRadius(50)
     }
 }
 

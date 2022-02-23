@@ -9,8 +9,9 @@ import Foundation
 import MapboxMaps
 
 public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
-
+    
     func prepare() {
+        mapView.gestures.delegate = self
         editableLayerIDs.removeAll()
         selectedFeature = nil
         isFeatureSelected = false

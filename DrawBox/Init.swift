@@ -27,7 +27,7 @@ public class InitBox: NSObject, ObservableObject {
     @Published var isVertexDeleting = false
     @Published var isVertexAdding = false
     
-    var locationTracking = false
+    @Published var locationTracking = false
     var cameraLocationConsumer: CameraLocationConsumer?
     
     //MARK: Helper Variables

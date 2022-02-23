@@ -14,14 +14,11 @@ class MapDisplayViewModel: ObservableObject {
     var geometry: String?
     
     @Published var displayBox: DisplayBox
-    @Published var startedLocation = false
-
-    private var moveToLocation = false
+    
     private var cancellables = Set<AnyCancellable>()
     
-    init(geometry: String? = nil, drawBox: DrawBox? = nil, moveToLocation: Bool = false) {
+    init(geometry: String? = nil, drawBox: DrawBox? = nil, displayBox: DisplayBox? = nil) {
         self.geometry = geometry
-        self.moveToLocation = moveToLocation
         
         if drawBox != nil {
             self.displayBox = drawBox!
@@ -31,16 +28,15 @@ class MapDisplayViewModel: ObservableObject {
                 .store(in: &cancellables)
         }
         else {
-            displayBox = DisplayBox()
-            displayBox.objectWillChange
+            self.displayBox = displayBox!
+            self.displayBox.objectWillChange
                 .sink(receiveValue: { self.objectWillChange.send() })
                 .store(in: &cancellables)
         }
         
-        self.mapView = displayBox.mapView
-        startedLocation = displayBox.locationTracking
+        mapView = self.displayBox.mapView
     }
-    
+
     func featureSelected() -> Bool {
         return displayBox.isFeatureSelected
     }
@@ -54,45 +50,41 @@ class MapDisplayViewModel: ObservableObject {
                 showGeometry()
             }
         }
-        if moveToLocation {
-            let _locationManager = CLLocationManager()
-            _locationManager.requestWhenInUseAuthorization()
-            _locationManager.startUpdatingLocation()
-            moveCamera2Location(_locationManager.location)
-        }
     }
     
-    func moveCamera2Location(_ location: CLLocation?) {
-//        print(">>>>> moveCamera2Location: \(location?.coordinate)")
-        if let location = location {
-            let screenPoint = mapView.mapboxMap.point(for: location.coordinate)
-            if !mapView.bounds.contains(screenPoint) {
-                mapView.camera.ease(to: CameraOptions(center: location.coordinate, zoom: 5),
-                                    duration: 0.5,
-                                    completion: { _ in
-                    self.mapView.camera.ease(
-                        to: CameraOptions(center: location.coordinate, zoom: 15),
-                        duration: 0.5)
-                })
-            } else {
-                mapView.camera.ease(
-                    to: CameraOptions(center: location.coordinate, zoom: 15),
-                    duration: 0.5)
-            }
-        }
-    }
+//    func moveCameraToCurrentLocation() {
+//        let _locationManager = CLLocationManager()
+//        _locationManager.requestWhenInUseAuthorization()
+//        _locationManager.startUpdatingLocation()
+//        moveCameraToLocation(_locationManager.location)
+//    }
+//
+//    func moveCameraToLocation(_ location: CLLocation?) {
+//        if let location = location {
+//            mapView.camera.ease(
+//                to: CameraOptions(center: location.coordinate, zoom: 15),
+//                duration: 0.5)
+//        }
+//    }
     
-    func locationChange() {
-        guard mapView != nil else { return }
-        startedLocation.toggle()
-        if startedLocation {
-            displayBox.locationTracking = true
-            displayBox.cameraLocationConsumer = CameraLocationConsumer(mapView: mapView)
-            mapView.location.addLocationConsumer(newConsumer: displayBox.cameraLocationConsumer!)
-        } else {
-            mapView.location.removeLocationConsumer(consumer: displayBox.cameraLocationConsumer!)
-            displayBox.cameraLocationConsumer = nil
-            displayBox.locationTracking = false
+//    func toggleTracking() {
+//        if !displayBox.locationTracking {
+//
+//        }
+//        else {
+//            displayBox.locationTracking = false
+//            mapView.location.removeLocationConsumer(consumer: displayBox.cameraLocationConsumer!)
+//            displayBox.cameraLocationConsumer = nil
+//        }
+//    }
+    
+
+    func moveToUserLocation() {
+        if displayBox.locationTracking {
+            displayBox.stopTracking()
+        }
+        else {
+            displayBox.startTacking()
         }
     }
     
@@ -100,7 +92,7 @@ class MapDisplayViewModel: ObservableObject {
         let untitSourceIdentifier = "unit-shape-source"
         var unitSource = GeoJSONSource()
         guard let wkt = geometry else { return }
-//        let centroid: CLLocationCoordinate2D?
+        //        let centroid: CLLocationCoordinate2D?
         var geometry: TGeometry
         if wkt.contains("POLYGON") {
             if wkt.contains("MULTIPOLYGON") {
@@ -108,13 +100,13 @@ class MapDisplayViewModel: ObservableObject {
                 let turfGeometry = convert_Geos2Turf_MultiPolygon(geosGeometry)
                 geometry = Geometry(turfGeometry)
                 unitSource.data = .feature(Feature(geometry: .multiPolygon(turfGeometry)))
-//                centroid = turfGeometry.polygons[0].centroid
+                //                centroid = turfGeometry.polygons[0].centroid
             } else {
                 let geosGeometry = try! GPolygon(wkt: wkt)
                 let turfGeometry = convert_Geos2Turf_Polygon(geosGeometry)
                 geometry = Geometry(turfGeometry)
                 unitSource.data = .feature(Feature(geometry: .polygon(turfGeometry)))
-//                centroid = turfGeometry.centroid
+                //                centroid = turfGeometry.centroid
             }
         } else { return }
         
@@ -126,7 +118,7 @@ class MapDisplayViewModel: ObservableObject {
         
         try! mapView.mapboxMap.style.addSource(unitSource, id: untitSourceIdentifier)
         try! mapView.mapboxMap.style.addLayer(unitLayer)
-
+        
         mapView.mapboxMap.setCamera(to: mapView.mapboxMap.camera(for: geometry, padding: UIEdgeInsets(top: 100, left: 100, bottom: 100, right: 100), bearing: nil, pitch: nil))
     }
     

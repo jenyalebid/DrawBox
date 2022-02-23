@@ -17,29 +17,44 @@ public class CameraLocationConsumer: LocationConsumer {
     }
     
     public func locationUpdate(newLocation: Location) {
-        print(">>>>> locationUpdate: \(newLocation.coordinate)")
-        if first {
-            if let mapView = mapView {
-                let screenPoint = mapView.mapboxMap.point(for: newLocation.coordinate)
-                if !mapView.bounds.contains(screenPoint) {
-                    mapView.camera.ease(to: CameraOptions(center: newLocation.coordinate, zoom: 5),
-                                         duration: 0.5,
-                                         completion: { _ in
-                        mapView.camera.ease(
-                            to: CameraOptions(center: newLocation.coordinate, zoom: 15),
-                            duration: 0.5)
-                    })
-                } else {
-                    mapView.camera.ease(
-                        to: CameraOptions(center: newLocation.coordinate, zoom: 15),
-                        duration: 0.5)
-                }
-            }
-            first = false
-        } else {
+        print(">>>>> Location Update: \(newLocation.coordinate)")
+//        if first {
+//            if let mapView = mapView {
+//                let screenPoint = mapView.mapboxMap.point(for: newLocation.coordinate)
+//                if !mapView.bounds.contains(screenPoint) {
+//                    mapView.camera.ease(to: CameraOptions(center: newLocation.coordinate, zoom: 5),
+//                                         duration: 0.5,
+//                                         completion: { _ in
+//                        mapView.camera.ease(
+//                            to: CameraOptions(center: newLocation.coordinate, zoom: 15),
+//                            duration: 0.5)
+//                    })
+//                } else {
+//                    mapView.camera.ease(
+//                        to: CameraOptions(center: newLocation.coordinate, zoom: 15),
+//                        duration: 0.5)
+//                }
+//            }
+//            first = false
+//        } else {
             mapView?.camera.ease(
                 to: CameraOptions(center: newLocation.coordinate, zoom: nil),
                 duration: 0.5)
-        }
+//        }
+    }
+}
+
+public class TrackingLocationConsumer: LocationConsumer {
+    weak var mapView: MapView?
+    
+    init(mapView: MapView) {
+        self.mapView = mapView
+    }
+    
+    public func locationUpdate(newLocation: Location) {
+        print(">>>>> Tracking Update: \(newLocation.coordinate)")
+        mapView?.camera.ease(
+            to: CameraOptions(center: newLocation.coordinate, zoom: nil),
+            duration: 0.5)
     }
 }
