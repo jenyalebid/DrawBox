@@ -10,7 +10,8 @@ import SwiftUI
 public struct TrackingView: View {
 
     @ObservedObject var viewModel: TrackingViewModel
-    
+    @ObservedObject var drawBox: DrawBox
+
     @State var showAlert = false
     @State var showDeleteAlert = false
     @State var buttonColor = Color.blue
@@ -21,12 +22,12 @@ public struct TrackingView: View {
     
     var formId: String
 
-
-    public init(geometry: Binding<String?>?, formId: String, chnages: Binding<Bool>) {
+    public init(geometry: Binding<String?>?, formId: String, chnages: Binding<Bool>, drawBox: DrawBox = DrawBox()) {
+        self.drawBox = drawBox
         self.formId = formId
         self._geometry = geometry ?? Binding.constant(nil)
         self._changes = chnages
-        viewModel = TrackingViewModel(geometry: "\(String(describing: geometry))", formId: formId)
+        viewModel = TrackingViewModel(drawBox: drawBox, geometry: "\(String(describing: geometry))", formId: formId)
     }
 
     public var body: some View {

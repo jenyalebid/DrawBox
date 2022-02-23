@@ -10,13 +10,11 @@ import Combine
 
 class DrawBoxViewModel: ObservableObject {
     
-    @Published var drawBox = DrawBox()
+    @Published var drawBox: DrawBox
     
     @Published var startedDrawing = false
     @Published var location = false
-    
-    private var cancellables = Set<AnyCancellable>()
-    
+        
     var deleteText: String = ""
     
     var currentButtonMode = buttonControl.none
@@ -29,15 +27,15 @@ class DrawBoxViewModel: ObservableObject {
         case deleteFeature = 4
     }
     
-    init() {
-        drawBox.objectWillChange
-            .sink(receiveValue: { self.objectWillChange.send() })
-            .store(in: &cancellables)
-        
-        drawBox.isDrawModeEnabled = true
+    init(drawBox: DrawBox) {
+        self.drawBox = drawBox
+        self.drawBox.isDrawModeEnabled = true
         
         if drawBox.isVertexDeleting {
             currentButtonMode = .deleteMode
+        }
+        if drawBox.isVertexAdding {
+            currentButtonMode = .addVertices
         }
     }
     

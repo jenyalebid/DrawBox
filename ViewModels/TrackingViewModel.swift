@@ -14,11 +14,13 @@ class TrackingViewModel: ObservableObject {
     @Published var startedTracking = false
     @Published var showModal = false
 
-    var drawBox = DrawBox()
+    var drawBox: DrawBox
     var formId: String
     var geometry: String?
 
-    init(geometry: String? = nil, formId: String) {
+
+    init(drawBox: DrawBox, geometry: String? = nil, formId: String) {
+        self.drawBox = drawBox
         self.geometry = geometry
         self.formId = formId
         self.drawBox.isDrawModeEnabled = true
@@ -70,10 +72,13 @@ class TrackingViewModel: ObservableObject {
 
     func trackingChanged() {
         if startedTracking {
+            drawBox.startTacking()
             drawBox.startDrawMode(.dmAddTrack)
             TrackRecorder.shared.formId = formId
             TrackRecorder.shared.delegate = drawBox
             TrackRecorder.shared.startRecording()
+            drawBox.mapView.mapboxMap.setCamera(to: CameraOptions(zoom: 15))
+
         } else {
             cleanTracking()
         }

@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct DrawBoxView: View {
     
-    @ObservedObject var viewModel = DrawBoxViewModel()
+    @ObservedObject var viewModel: DrawBoxViewModel
     
     var drawType: String
     
@@ -18,7 +18,8 @@ public struct DrawBoxView: View {
     
     @State var showAlert = false
     
-    public init(drawType: String, geometry: Binding<String?>?, changes: Binding<Bool>) {
+    public init(drawBox: DrawBox, drawType: String, geometry: Binding<String?>?, changes: Binding<Bool>) {
+        self.viewModel = DrawBoxViewModel(drawBox: drawBox)
         self.drawType = drawType
         self._geometry = geometry ?? Binding.constant(nil)
         self._changes = changes
@@ -99,7 +100,7 @@ struct MapButton: View {
             }
         }
         .padding()
-        .background(highlighted ? selectedColor : defaultColor).cornerRadius(20)
+        .background(highlighted ? selectedColor : defaultColor).cornerRadius(50)
         .alert(isPresented: $showAlert) { () -> Alert in
             Alert(
                 title: Text("Deleting Geometry"),

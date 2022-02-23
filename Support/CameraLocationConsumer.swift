@@ -23,8 +23,8 @@ public class CameraLocationConsumer: LocationConsumer {
 //                let screenPoint = mapView.mapboxMap.point(for: newLocation.coordinate)
 //                if !mapView.bounds.contains(screenPoint) {
 //                    mapView.camera.ease(to: CameraOptions(center: newLocation.coordinate, zoom: 5),
-//                                         duration: 0.5,
-//                                         completion: { _ in
+//                                        duration: 0.5,
+//                                        completion: { _ in
 //                        mapView.camera.ease(
 //                            to: CameraOptions(center: newLocation.coordinate, zoom: 15),
 //                            duration: 0.5)
@@ -40,21 +40,6 @@ public class CameraLocationConsumer: LocationConsumer {
             mapView?.camera.ease(
                 to: CameraOptions(center: newLocation.coordinate, zoom: nil),
                 duration: 0.5)
-//        }
-    }
-}
-
-public class TrackingLocationConsumer: LocationConsumer {
-    weak var mapView: MapView?
-    
-    init(mapView: MapView) {
-        self.mapView = mapView
-    }
-    
-    public func locationUpdate(newLocation: Location) {
-        print(">>>>> Tracking Update: \(newLocation.coordinate)")
-        mapView?.camera.ease(
-            to: CameraOptions(center: newLocation.coordinate, zoom: nil),
-            duration: 0.5)
-    }
+        }
+//    }
 }

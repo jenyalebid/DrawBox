@@ -11,29 +11,19 @@ import Combine
 class MapDisplayViewModel: ObservableObject {
     
     var mapView: MapView!
+    var displayBox: DisplayBox
+
     var geometry: String?
-    
-    @Published var displayBox: DisplayBox
-    
-    private var cancellables = Set<AnyCancellable>()
     
     init(geometry: String? = nil, drawBox: DrawBox? = nil, displayBox: DisplayBox? = nil) {
         self.geometry = geometry
         
         if drawBox != nil {
             self.displayBox = drawBox!
-            
-            drawBox!.objectWillChange
-                .sink(receiveValue: { self.objectWillChange.send() })
-                .store(in: &cancellables)
         }
         else {
             self.displayBox = displayBox!
-            self.displayBox.objectWillChange
-                .sink(receiveValue: { self.objectWillChange.send() })
-                .store(in: &cancellables)
         }
-        
         mapView = self.displayBox.mapView
     }
 
