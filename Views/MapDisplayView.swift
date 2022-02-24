@@ -11,7 +11,7 @@ public struct MapDisplayView: View {
     
     @ObservedObject var viewModel: MapDisplayViewModel
     
-    public init(geometry: String? = nil, drawBox: DrawBox? = nil, displayBox: DisplayBox? = nil) {
+    public init(geometry: [String?] = [], drawBox: DrawBox? = nil, displayBox: DisplayBox? = nil) {
         viewModel = MapDisplayViewModel(geometry: geometry, drawBox: drawBox, displayBox: displayBox)
     }
     
@@ -51,7 +51,8 @@ struct LocationButton: View {
             }
         }
         .padding(8.0)
-        .background(Color.white).cornerRadius(50)
+        .background(Color(UIColor.systemBackground)).cornerRadius(50)
+        .buttonStyle(BorderlessButtonStyle())
     }
 }
 

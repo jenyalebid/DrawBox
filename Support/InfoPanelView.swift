@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InfoPanelView: View {
     
-//    @EnvironmentObject var displayViewModel: MapDisplayViewModel
+    @EnvironmentObject var displayViewModel: MapDisplayViewModel
     
     @State private var panelWidth = 0.0
     
@@ -23,10 +23,14 @@ struct InfoPanelView: View {
                         .font(.title)
                         .rotationEffect(.degrees(panelWidth > 60 ? 90 : -90))
                 }
+                .buttonStyle(BorderlessButtonStyle())
                 if panelWidth > 200 {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Geometry Information").foregroundColor(Color.black)
-//                        Text("\(displayViewModel.drawBox?.selectedFeature?.identifier!)")
+                        Text("Geometry Information").foregroundColor(Color(UIColor.label))
+                        HStack {
+                            Text("Type:")
+                            Text("\(displayViewModel.showInfo()!)")
+                        }
                         Spacer()
                     }
                     .padding(8.0)
@@ -35,7 +39,7 @@ struct InfoPanelView: View {
             }
         }
         .frame(width: (panelWidth >= 30 ? panelWidth : 30), height: 200)
-        .background(Color.white)
+        .background(Color(UIColor.systemBackground))
         .cornerRadius(10, corners: [.topLeft, .bottomLeft])
         .cornerRadius(panelWidth > 30 ? 10 : 0, corners: [.topRight, .bottomRight])
         .padding(.horizontal, panelWidth > 30 ? 12 : 0)

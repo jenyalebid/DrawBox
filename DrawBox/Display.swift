@@ -13,8 +13,11 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
     func prepare() {
         mapView.gestures.delegate = self
         editableLayerIDs.removeAll()
+        mapZoom()
         selectedFeature = nil
         isFeatureSelected = false
+        makeEditSources()
+        makeSelectionSource()
     }
     
     func clear() {
@@ -124,6 +127,7 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
         
         for feature in features {
             var newFeature = feature
+            selectedFeature = feature
             switch feature.geometry {
             case .point:
                 newFeature.properties = ["TYPE": "Point", "ID": JSONValue(UUID().uuidString)]
@@ -139,6 +143,14 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
             }
         }
         isGeometryLoaded = true
+    }
+    
+    func mapZoom() {
+        if let feature = selectedFeature {
+            if zoomToFeature {
+                mapView.mapboxMap.setCamera(to: mapView.mapboxMap.camera(for: Geometry(feature.geometry!), padding: UIEdgeInsets(top: 100, left: 100, bottom: 100, right: 100), bearing: nil, pitch: nil))
+            }
+        }
     }
     
     //MARK: - Update Map
@@ -191,6 +203,6 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
     //MARK: - Interaction
     
     func handleTap(_ gesture: UIGestureRecognizer) {
-        guard currentMode != .dmAddTrack else { return }
+        findFeatures(gesture)
     }
 }

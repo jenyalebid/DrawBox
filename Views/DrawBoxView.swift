@@ -27,7 +27,7 @@ public struct DrawBoxView: View {
     
     public var body: some View {
         ZStack(alignment: .bottom) {
-            MapDisplayView(geometry: geometry, drawBox: viewModel.drawBox)
+            MapDisplayView(geometry: [geometry], drawBox: viewModel.drawBox)
             Group {
                 if !viewModel.drawBox.isFeatureSelected {
                     HStack(spacing: 10) {
@@ -38,7 +38,7 @@ public struct DrawBoxView: View {
                 else {
                     HStack(spacing: 10) {
                         MapButton(voidAction: viewModel.editing, highlighted: viewModel.drawBox.isEditingStarted, label: "Editing", image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
-                        MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", defaultColor: Color.white, selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
+                        MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
                         
                         if viewModel.drawBox.isEditingStarted && drawType != "Point" {
                             MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.drawBox.isVertexAdding, label: "Vertices", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
@@ -73,7 +73,7 @@ struct MapButton: View {
     let label: String
     let image: String
     
-    var defaultColor: Color = Color.white
+    var defaultColor: Color = Color(UIColor.systemBackground)
     var selectedColor: Color = Color.blue
     
     @Binding var showAlert: Bool
@@ -93,7 +93,7 @@ struct MapButton: View {
         } label: {
             HStack {
                 Image(systemName: image)
-                    .foregroundColor(highlighted ? defaultColor : selectedColor)
+                    .foregroundColor(highlighted ? Color.white : selectedColor)
                 if highlighted && !label.isEmpty {
                     Text(label).font(.footnote).foregroundColor(Color.white)
                 }

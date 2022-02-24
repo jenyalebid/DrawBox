@@ -16,13 +16,13 @@ public class DrawBox: DisplayBox {
         editableLayerIDs.removeAll()
         selectedFeature = nil
         isFeatureSelected = false
-        if isDrawModeEnabled {
+//        if isDrawModeEnabled {
             makeEditSources()
             makeSelectionSource()
             gestureLong = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
             gestureLong!.delegate = self
             mapView.addGestureRecognizer(gestureLong!)
-        }
+//        }
     }
 
     //MARK: - Draw Mode
