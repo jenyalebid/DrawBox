@@ -101,9 +101,11 @@ extension DisplayBox: GestureManagerDelegate {
     }
     
     func startTacking() {
-        locationTracking = true
-        cameraLocationConsumer = CameraLocationConsumer(mapView: mapView)
-        mapView.location.addLocationConsumer(newConsumer: cameraLocationConsumer!)
+        if !locationTracking {
+            locationTracking = true
+            cameraLocationConsumer = CameraLocationConsumer(mapView: mapView)
+            mapView.location.addLocationConsumer(newConsumer: cameraLocationConsumer!)
+        }
     }
     
     func stopTracking() {

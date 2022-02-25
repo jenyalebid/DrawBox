@@ -21,6 +21,11 @@ public struct MapDisplayView: View {
                 .onDisappear {
                     viewModel.displayBox.stopTracking()
                 }
+                .onAppear {
+                    if viewModel.trackingDefault {
+                        viewModel.displayBox.startTacking()
+                    }
+                }
             VStack(alignment: .trailing) {
                 if viewModel.featureSelected() {
                     InfoPanelView().environmentObject(viewModel)

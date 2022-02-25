@@ -15,6 +15,8 @@ class MapDisplayViewModel: ObservableObject {
     var geometry: [String?]
     var features: [Turf.Feature] = []
     
+    var trackingDefault = UserDefaults.standard.object(forKey: "autoTrackUserLocation") as? Bool ?? false
+    
     init(geometry: [String?] = [], drawBox: DrawBox? = nil, displayBox: DisplayBox? = nil) {
         self.geometry = geometry
 
@@ -40,6 +42,9 @@ class MapDisplayViewModel: ObservableObject {
         if !geometry.isEmpty {
             displayBox.loadFeatures(features: features)
         }
+        if trackingDefault {
+            displayBox.startTacking()
+        }
     }
     
     func moveToUserLocation() {
@@ -63,8 +68,8 @@ class MapDisplayViewModel: ObservableObject {
     }
     
     func makeFeatures() {
-        for geometry in geometry {
-            guard let wkt = geometry else { return }
+        for item in geometry {
+            guard let wkt = item else { return }
             switch wkt.prefix(8) {
             case "POLYGON(":
                 let geosGeometry = try! GPolygon(wkt: wkt)

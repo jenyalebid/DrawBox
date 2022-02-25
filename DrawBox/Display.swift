@@ -131,17 +131,21 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
             switch feature.geometry {
             case .point:
                 newFeature.properties = ["TYPE": "Point", "ID": JSONValue(UUID().uuidString)]
-                updateMapPoints(feature: newFeature)
+                pointFeatures.append(newFeature)
             case .lineString:
                 newFeature.properties = ["TYPE": "LineString", "ID": JSONValue(UUID().uuidString)]
-                updateMapLines(feature: newFeature)
+                lineFeatures.append(newFeature)
             case .polygon:
                 newFeature.properties = ["TYPE": "Polygon", "ID": JSONValue(UUID().uuidString)]
-                updateMapPolygons(feature: newFeature)
+                shapeFeatures.append(newFeature)
             default:
                 assertionFailure()
             }
         }
+        updateMapSource(sourceID: pointSourceIdentifier, features: FeatureCollection(features: pointFeatures))
+        updateMapSource(sourceID: lineSourceIdentifier, features: FeatureCollection(features: lineFeatures))
+        updateMapSource(sourceID: shapeSourceIdentifier, features: FeatureCollection(features: shapeFeatures))
+
         isGeometryLoaded = true
     }
     

@@ -156,7 +156,42 @@ public class DrawBox: DisplayBox {
         if currentMode == .dmAddShape {
             addShape()
         }
+//        addHole()
     }
+    
+    // TODO: Add holes to shapes feature
+//    func addHole() {
+//        if supportPointsArray.count < 3 { return }
+//        if supportPointsArray.count >= 4 {
+//            shapeFeatures.removeAll { feature in
+//                feature.properties?["TYPE"] == "temp"
+//            }
+//        }
+//        isGeometryChanged = true
+//        var points = supportPointsArray
+//        points.append(supportPointsArray.first!)
+//
+//        let innerRing = Ring(coordinates: points)
+//        let outerRing = Ring(coordinates: getFeatureCoordinates(feature: selectedFeature!)!)
+//        var newFeature = Feature(geometry: .polygon(Polygon(outerRing: outerRing, innerRings: [innerRing])))
+//        newFeature.properties = ["TYPE": "temp"]
+//        updateMapPolygons(feature: newFeature)
+//    }
+//
+//    func getFeatureCoordinates(feature: Feature) -> [LocationCoordinate2D]? {
+////        var coordinates: [LocationCoordinate2D] = []
+//
+//        switch feature.geometry {
+//        case .polygon(let polygon):
+//            for coord in polygon.coordinates {
+//                return coord
+////                coordinates.append(LocationCoordinate2D(latitude: coord.latitude, longitude: coord.longitude))
+//            }
+//        default:
+//            assertionFailure()
+//        }
+//        return nil
+//    }
     
     func addShape() {
         if supportPointsArray.count < 3 { return }

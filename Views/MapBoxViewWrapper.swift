@@ -37,9 +37,8 @@ public class MapViewController: UIViewController {
         locationManager.requestAlwaysAuthorization()
         
         let resourceOptions = ResourceOptions(accessToken: "pk.eyJ1IjoiamVueWFsZWJpZCIsImEiOiJja3Y2dDZ2cnQyZDUzMm9xMXl2enR0ODJxIn0.CADXy6tenwyGeBU9Yimv5A")
-        let cameraOptions = CameraOptions(center: setLocation(locationManager: locationManager), zoom: 5)
         let mapOptions = MapOptions(optimizeForTerrain: true)
-        let myMapInitOptions = MapInitOptions(resourceOptions: resourceOptions, mapOptions: mapOptions, cameraOptions: cameraOptions)
+        let myMapInitOptions = MapInitOptions(resourceOptions: resourceOptions, mapOptions: mapOptions, cameraOptions: locationOptions(locationManager: locationManager))
         viewModel.mapView = MapView(frame: view.bounds, mapInitOptions: myMapInitOptions)
         viewModel.mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
@@ -66,11 +65,13 @@ public class MapViewController: UIViewController {
         }
     }
     
-    func setLocation(locationManager: CLLocationManager) -> CLLocationCoordinate2D {
+    func locationOptions(locationManager: CLLocationManager) -> CameraOptions {
+        let defaults = UserDefaults.standard
+        
         if viewModel.displayBox.zoomToFeature {
-            return geometryCenter() ?? CLLocationCoordinate2D(latitude: 44.0582, longitude: -121.3153)
+            return CameraOptions(center: geometryCenter() ?? CLLocationCoordinate2D(latitude: 44.0582, longitude: -121.3153), zoom: 15)
         }
-        return locationManager.location?.coordinate ?? CLLocationCoordinate2D(latitude: 44.0582, longitude: -121.3153)
+        return CameraOptions(center: locationManager.location?.coordinate ?? CLLocationCoordinate2D(latitude: 44.0582, longitude: -121.3153), zoom: defaults.object(forKey: "mapZoom") as? CGFloat ?? 5)
     }
     
     override public func viewWillDisappear(_ animated: Bool) {

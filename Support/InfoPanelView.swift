@@ -11,19 +11,46 @@ struct InfoPanelView: View {
     
     @EnvironmentObject var displayViewModel: MapDisplayViewModel
     
-    @State private var panelWidth = 0.0
+    @State private var pin = UserDefaults.standard.object(forKey: "infoPinned") as? Bool ?? false
+    @State private var notes = false
+    @State private var panelWidth = UserDefaults.standard.object(forKey: "infoPinned") as? Bool ?? false ? 240.0 : 0.0
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topLeading) {
             HStack(spacing: 0) {
-                Button {
-                    panelWidth = (panelWidth == 0 ? 240 : 0)
-                } label: {
-                    Image(systemName: "control")
-                        .font(.title)
-                        .rotationEffect(.degrees(panelWidth > 60 ? 90 : -90))
+                VStack {
+                    Button {
+                        pin.toggle()
+                        UserDefaults.standard.set(pin, forKey: "infoPinned")
+                    } label: {
+                        if panelWidth == 240 {
+                            Image(systemName: pin == false ? "pin" : "pin.fill")
+                                .foregroundColor(.orange)
+                                .rotationEffect(.degrees(45))
+                                .padding([.top, .leading, .trailing], 6.0)
+                        }
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    Spacer()
+                    Button {
+                        panelWidth = (panelWidth == 0 ? 240 : 0)
+                    } label: {
+                        Image(systemName: "control")
+                            .font(.title)
+                            .rotationEffect(.degrees(panelWidth > 60 ? 90 : -90))
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    Spacer()
+                    Button {
+                        notes.toggle()
+                    } label: {
+                        if panelWidth == 240 {
+                            Image(systemName: "note.text")
+                                .foregroundColor(.teal)
+                                .padding([.bottom, .leading, .trailing], 6.0)
+                        }
+                    }
                 }
-                .buttonStyle(BorderlessButtonStyle())
                 if panelWidth > 200 {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Geometry Information").foregroundColor(Color(UIColor.label))
@@ -37,6 +64,9 @@ struct InfoPanelView: View {
                     Spacer()
                 }
             }
+        }
+        .sheet(isPresented: $notes) {
+            Text("Geometry Notes")
         }
         .frame(width: (panelWidth >= 30 ? panelWidth : 30), height: 200)
         .background(Color(UIColor.systemBackground))
@@ -82,8 +112,8 @@ struct RoundedCorner: Shape {
 struct InfoPanelView_Previews: PreviewProvider {
     static var previews: some View {
         HStack {
-            InfoPanelView()
             Spacer()
+            InfoPanelView()
         }
         .background(Color.gray)
     }
