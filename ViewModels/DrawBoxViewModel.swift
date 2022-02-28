@@ -6,7 +6,6 @@
 //
 
 import MapboxMaps
-import Combine
 
 class DrawBoxViewModel: ObservableObject {
     
@@ -16,66 +15,22 @@ class DrawBoxViewModel: ObservableObject {
     @Published var location = false
         
     var deleteText: String = ""
-    
-    var currentButtonMode = buttonControl.none
-    
-    enum buttonControl: Int {
-        case none = 0
-        case addVertices = 1
-        case deleteMode  = 2
-        case deleteVertex = 3
-        case deleteFeature = 4
-    }
+    var editMode = DrawBox.buttonControl.none
     
     init(drawBox: DrawBox) {
         self.drawBox = drawBox
         self.drawBox.isDrawModeEnabled = true
-        
-        if drawBox.isVertexDeleting {
-            currentButtonMode = .deleteMode
-        }
-        if drawBox.isVertexAdding {
-            currentButtonMode = .addVertices
-        }
+        self.editMode = drawBox.editMode
     }
     
     func onDisappear() {
         drawBox.clear()
     }
 
-    func handleButtons(clickType: buttonControl) {
-        switch clickType {
-        case .none:
-            drawBox.isVertexDeleting = false
-            clearButtonSelection()
-            currentButtonMode = .none
-        case .addVertices:
-            clearButtonSelection()
-            drawBox.changeMode(.dmEditAddVertex)
-            currentButtonMode = .addVertices
-        case .deleteMode:
-            clearButtonSelection()
-            drawBox.isVertexDeleting = true
-            currentButtonMode = .deleteMode
-        case .deleteVertex:
-            clearButtonSelection()
-            drawBox.deleteFeaturePoint()
-            currentButtonMode = .deleteVertex
-        case .deleteFeature:
-            drawBox.isFeatureDeleting = true
-        }
-    }
-    
     func checkChanges() -> Bool {
         return drawBox.isGeometryChanged
     }
-    
-    func clearButtonSelection() {
-        drawBox.changeMode(.dmNONE)
-        drawBox.isVertexSelected = false
-        drawBox.isVertexDeleting = false
-    }
-    
+
     func drawing(type: String) {
         switch type {
         case "Point":
@@ -92,52 +47,66 @@ class DrawBoxViewModel: ObservableObject {
         }
     }
     
+    func toggleControl(control: DrawBox.buttonControl) {
+        if drawBox.editMode == control {
+            drawBox.editMode = .none
+        }
+        else {
+            drawBox.editMode = control
+        }
+        drawBox.handleControls(control: drawBox.editMode)
+    }
+    
+    func checkControl(control: DrawBox.buttonControl) -> Bool {
+        if drawBox.editMode == control {
+            return true
+        }
+        return false
+    }
+    
     func editing() {
         drawBox.isEditingStarted.toggle()
         if drawBox.isEditingStarted {
             drawBox.createEditingVertex4SelectedFeature()
         } else {
             drawBox.clearEditingVertex()
-            handleButtons(clickType: .none)
         }
     }
     
     func addingVertex() {
-        if currentButtonMode != .addVertices {
-            handleButtons(clickType: .addVertices)
-        }
-        else {
-            handleButtons(clickType: .none)
-        }
+        toggleControl(control: .addVertices)
+    }
+    
+    func addingHole() {
+        toggleControl(control: .addHole)
     }
     
     func deleteFeature() {
         drawBox.deleteSelectedFeature()
-        drawBox.isFeatureDeleting = false
     }
     
     func delete() {
-        if currentButtonMode != .deleteMode && !drawBox.isVertexSelected && drawBox.isEditingStarted {
-            handleButtons(clickType: .deleteMode)
+        if !drawBox.isVertexSelected && drawBox.isEditingStarted {
+            toggleControl(control: .deleteMode)
         }
         else if drawBox.isVertexSelected {
-            handleButtons(clickType: .deleteVertex)
+            toggleControl(control: .deleteVertex)
         }
         else if drawBox.isFeatureSelected && !drawBox.isEditingStarted  {
-            handleButtons(clickType: .deleteFeature)
+            toggleControl(control: .deleteFeature)
         }
         else {
-            handleButtons(clickType: .none)
+            toggleControl(control: .none)
         }
     }
     
     func deleteType() -> Bool {
         if drawBox.isVertexSelected {
-            drawBox.changeMode(.dmNONE)
+//            drawBox.changeMode(.dmNONE)
             deleteText = "Vertex"
             return true
         }
-        else if drawBox.isVertexDeleting {
+        else if drawBox.editMode == .deleteMode {
             deleteText = "Mode"
             return true
         }

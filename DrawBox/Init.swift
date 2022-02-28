@@ -6,6 +6,7 @@
 //
 
 import MapboxMaps
+import Combine
 
 enum DrawMode: Int {
     case dmNONE = 0
@@ -14,18 +15,32 @@ enum DrawMode: Int {
     case dmAddShape = 3
     case dmAddTrack = 4
     case dmEditAddVertex = 11
+    case dmAddHole = 5
 }
 
 public class InitBox: NSObject, ObservableObject {
     
     weak var mapView: MapView!
     
-    @Published var isEditingStarted = false
     @Published var isFeatureSelected = false
-    @Published var isFeatureDeleting = false
+    @Published var isEditingStarted = false
     @Published var isVertexSelected = false
-    @Published var isVertexDeleting = false
-    @Published var isVertexAdding = false
+//    @Published var isFeatureDeleting = false
+
+//    @Published var isVertexDeleting = false
+//    @Published var isVertexAdding = false
+//    @Published var isAddingHole = false
+    
+    enum buttonControl: Int {
+        case none = 0
+        case addVertices = 1
+        case addHole = 2
+        case deleteMode = 3
+        case deleteVertex = 4
+        case deleteFeature = 5
+    }
+    
+    @Published var editMode = buttonControl.none
     
     public var zoomToFeature = false
     

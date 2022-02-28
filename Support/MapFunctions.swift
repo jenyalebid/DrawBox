@@ -7,6 +7,7 @@
 
 import GEOSwift
 import MapboxMaps
+import CoreLocation
 
 
 typealias GPoint = GEOSwift.Point
@@ -25,6 +26,15 @@ typealias TPolygon = Turf.Polygon
 typealias TMultiPolygon = Turf.MultiPolygon
 typealias TGeometry = Turf.Geometry
 
+func getOuterRing(feature: Turf.Feature) -> [CLLocationCoordinate2D] {
+    switch feature.geometry {
+    case .polygon(let polygon):
+        return polygon.coordinates[0]
+    default:
+        assertionFailure()
+    }
+    return []
+}
 
 func getCoordinates(feature: Turf.Feature) -> [CLLocationCoordinate2D] {
     switch feature.geometry {
@@ -33,12 +43,55 @@ func getCoordinates(feature: Turf.Feature) -> [CLLocationCoordinate2D] {
     case .lineString(let line):
         return line.coordinates
     case .polygon(let polygon):
-        return polygon.coordinates[0]
+        var coords: [CLLocationCoordinate2D] = []
+        for coordSet in polygon.coordinates {
+            coords.append(contentsOf: coordSet)
+        }
+        return coords
     default:
         assertionFailure()
     }
     return []
 }
+
+func getPolygonCooordinates(feature: Turf.Feature, index: Int) -> (modified: [CLLocationCoordinate2D], outer: [CLLocationCoordinate2D], inner: [[CLLocationCoordinate2D]], innerIndex: Int) {
+    var modified: [CLLocationCoordinate2D] = []
+    var outer: [CLLocationCoordinate2D] = []
+    var inner: [[CLLocationCoordinate2D]] = []
+    var localIndex = 0
+    var innerIndex = 0
+    var counter = 0
+    
+    switch feature.geometry {
+    case .polygon(let polygon):
+        outer = polygon.coordinates[0]
+        for coordSet in polygon.coordinates {
+            for _ in coordSet {
+                localIndex += 1
+            }
+            if localIndex >= index && modified.isEmpty {
+                modified.append(contentsOf: coordSet)
+                innerIndex = counter
+            }
+            counter += 1
+            inner.append(contentsOf: [coordSet])
+        }
+    default:
+        assertionFailure()
+    }
+    inner.removeFirst()
+    
+    return (modified, outer, inner, innerIndex)
+}
+
+//func updatePolygonCoordinates(feature: Turf.Feature, index: Int) -> ([CLLocationCoordinate2D], [[CLLocationCoordinate2D]]) {
+//    switch feature.geometry {
+//    case .polygon(let polygon):
+//
+//    default:
+//        assertionFailure()
+//    }
+//}
 
 func getPoints(feature: Turf.Feature) throws -> [GEOSwift.Point] {
     switch feature.geometry {

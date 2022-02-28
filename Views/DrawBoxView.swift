@@ -41,7 +41,11 @@ public struct DrawBoxView: View {
                         MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
                         
                         if viewModel.drawBox.isEditingStarted && drawType != "Point" {
-                            MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.drawBox.isVertexAdding, label: "Vertices", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
+                            MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), label: "Vertices", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
+                        }
+                        
+                        if viewModel.drawBox.isEditingStarted && drawType == "Polygon" {
+                            MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: "Stop Adding", image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
                         }
                     }
                     .padding()
@@ -87,7 +91,7 @@ struct MapButton: View {
                 voidAction()
                 
             }
-            if viewModel.drawBox.isFeatureDeleting {
+            if viewModel.drawBox.editMode == .deleteFeature {
                 showAlert = true
             }
         } label: {
@@ -109,7 +113,7 @@ struct MapButton: View {
                     viewModel.deleteFeature()
                 }),
                 secondaryButton: .cancel(Text("Cancel"), action: {
-                    viewModel.drawBox.isFeatureDeleting = false
+                    viewModel.drawBox.editMode = .none
                 })
             )
         }
