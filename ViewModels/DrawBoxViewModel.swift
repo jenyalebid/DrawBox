@@ -102,7 +102,7 @@ class DrawBoxViewModel: ObservableObject {
     
     func deleteType() -> Bool {
         if drawBox.isVertexSelected {
-//            drawBox.changeMode(.dmNONE)
+            drawBox.changeMode(.dmNONE)
             deleteText = "Vertex"
             return true
         }

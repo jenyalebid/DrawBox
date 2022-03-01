@@ -54,44 +54,44 @@ func getCoordinates(feature: Turf.Feature) -> [CLLocationCoordinate2D] {
     return []
 }
 
-func getPolygonCooordinates(feature: Turf.Feature, index: Int) -> (modified: [CLLocationCoordinate2D], outer: [CLLocationCoordinate2D], inner: [[CLLocationCoordinate2D]], innerIndex: Int) {
+func getAllPolygonCooordinates(feature: Turf.Feature, index: Int? = nil) -> (modified: [CLLocationCoordinate2D], outer: [CLLocationCoordinate2D], inner: [[CLLocationCoordinate2D]], innerIndex: Int, newIndex: Int) {
     var modified: [CLLocationCoordinate2D] = []
     var outer: [CLLocationCoordinate2D] = []
     var inner: [[CLLocationCoordinate2D]] = []
     var localIndex = 0
     var innerIndex = 0
     var counter = 0
+    var newIndex = 0
+    var outSideCounter = 0
     
     switch feature.geometry {
     case .polygon(let polygon):
         outer = polygon.coordinates[0]
         for coordSet in polygon.coordinates {
-            for _ in coordSet {
-                localIndex += 1
+            if index != nil {
+                var localSet = coordSet
+                localSet.removeLast()
+                for _ in localSet {
+                    if counter == index && modified.isEmpty {
+                        modified.append(contentsOf: coordSet)
+                        innerIndex = outSideCounter
+                        newIndex = localIndex
+                    }
+                    localIndex += 1
+                    counter += 1
+                }
+                localIndex = 0
             }
-            if localIndex >= index && modified.isEmpty {
-                modified.append(contentsOf: coordSet)
-                innerIndex = counter
+            outSideCounter += 1
+            if coordSet != outer {
+                inner.append(contentsOf: [coordSet])
             }
-            counter += 1
-            inner.append(contentsOf: [coordSet])
         }
     default:
         assertionFailure()
     }
-    inner.removeFirst()
-    
-    return (modified, outer, inner, innerIndex)
+    return (modified, outer, inner, innerIndex, newIndex)
 }
-
-//func updatePolygonCoordinates(feature: Turf.Feature, index: Int) -> ([CLLocationCoordinate2D], [[CLLocationCoordinate2D]]) {
-//    switch feature.geometry {
-//    case .polygon(let polygon):
-//
-//    default:
-//        assertionFailure()
-//    }
-//}
 
 func getPoints(feature: Turf.Feature) throws -> [GEOSwift.Point] {
     switch feature.geometry {
@@ -101,7 +101,17 @@ func getPoints(feature: Turf.Feature) throws -> [GEOSwift.Point] {
     case .lineString(let line):
         return try convert_Turf2Geos_LineString(line).points
     case .polygon(let polygon):
-        return try convert_Turf2Geos_Polygon(polygon).exterior.points
+        //let geoPolygon
+        let geoPolygon = try convert_Turf2Geos_Polygon(polygon)
+        var pointArray = geoPolygon.exterior.points
+        pointArray.removeLast()
+        let holes = geoPolygon.holes
+        for hole in holes {
+            pointArray.append(contentsOf: hole.points)
+            pointArray.removeLast()
+        }
+//        pointArray.append(contentsOf: geoPolygon.exterior.points)
+        return pointArray
     default:
         assertionFailure()
     }
@@ -126,7 +136,7 @@ func findVertexOn(feature: Turf.Feature, addingPoint point: LocationCoordinate2D
 
     let p = points[1] //point on feature side
     let shapePoints = try getPoints(feature: feature)
-    for i in 0..<shapePoints.count-1 {
+    for i in 0..<shapePoints.count - 1 {
         let lp1 = shapePoints[i]
         let lp2 = shapePoints[i+1]
         let d = scalarProduct(fromPoint: p, lp1, lp2)

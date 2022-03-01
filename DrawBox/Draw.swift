@@ -56,6 +56,9 @@ public class DrawBox: DisplayBox {
 //            setCurrentVertex(vertexFeature: nil)
         case .dmAddHole:
             supportPointsArray = []
+            supportPointFeatures = []
+            let newFeatureCollection = FeatureCollection(features: [])
+            updateMapSource(sourceID: supportPointSourceIdentifier, features: newFeatureCollection)
 //            editMode = .addHole
 //            isAddingHole = true
             break
@@ -71,7 +74,7 @@ public class DrawBox: DisplayBox {
         case .dmAddLine:
             removeSupportPoints()
         case .dmAddShape:
-//            endAddingShape()
+            endAddingShape()
             removeSupportPoints()
         case .dmAddTrack:
             if isDrawingValid {
@@ -83,9 +86,7 @@ public class DrawBox: DisplayBox {
             editMode = .none
             break
         case .dmAddHole:
-            lineFeatures.removeLast() // clear support lines
-            updateMapLines()
-            editMode = .none
+            endAddingHoles()
         case .dmNONE:
             return
         }
@@ -177,7 +178,7 @@ public class DrawBox: DisplayBox {
     func handleControls(control: buttonControl) {
         switch control {
         case .none:
-            currentMode = .dmNONE
+            changeMode(.dmNONE)
             isVertexSelected = false
         case .addVertices:
             changeMode(.dmEditAddVertex)
@@ -193,26 +194,23 @@ public class DrawBox: DisplayBox {
     }
     
     // TODO: Add holes to shapes feature
-    //V2 - maybe
     func addHole() {
         if supportPointsArray.count < 3 { return }
         if supportPointsArray.count >= 4 {
-//            shapeFeatures.removeAll { feature in
-//                feature.properties?["TYPE"] == "temp"
-//            }
-
         }
 
         isGeometryChanged = true
+        
         var points = supportPointsArray
         points.append(supportPointsArray.first!)
 
-        let featureInfo = getPolygonCooordinates(feature: selectedFeature!, index: 100)
+        let featureInfo = getAllPolygonCooordinates(feature: selectedFeature!)
 
         var innerRing = featureInfo.inner
         let outerRing = featureInfo.outer
-        if !innerRing.isEmpty {
-            innerRing.removeFirst()
+
+        if !innerRing.isEmpty && supportPointsArray.count > 3 {
+            innerRing.removeLast()
         }
         innerRing.append(points)
 
@@ -224,10 +222,20 @@ public class DrawBox: DisplayBox {
         var newFeature = Feature(geometry: .polygon(Polygon(outerRing: Ring(coordinates: outerRing), innerRings: ringArray)))
         newFeature.properties = ["TYPE": "Polygon",
                               "ID": JSONValue(UUID().uuidString)]
-//        shapeFeatures[shapeFeatures.count] = newFeature
+        
         shapeFeatures.remove(at: getFeatureIndex(feature: selectedFeature!))
         selectedFeature = newFeature
         updateMapPolygons(feature: newFeature)
+        let newFeatureCollection = FeatureCollection(features: [selectedFeature!])
+        updateMapSource(sourceID: selectedSourceIdentifier, features: newFeatureCollection)
+    }
+    
+    func endAddingHoles() {
+        lineFeatures.removeLast()
+        updateMapLines()
+        editMode = .none
+        removeSupportPoints()
+        createEditingVertex4SelectedFeature()
     }
     
     //V1
@@ -310,8 +318,10 @@ public class DrawBox: DisplayBox {
                         index += 1
                         supportPointFeatures.append(newFeature)
                     }
+                    index -= 1
+                    supportPointFeatures.removeLast()
                 }
-                supportPointFeatures.removeLast()
+
             default:
                 return
             }
@@ -338,8 +348,7 @@ public class DrawBox: DisplayBox {
     func addPointToSelectedFeature(_ locationCoord: CLLocationCoordinate2D) {
         guard selectedFeature != nil else { return }
         do {
-            let feature = selectedFeature!
-            let (vertexIndex, vertexPoint) = try findVertexOn(feature: feature, addingPoint: locationCoord, threshold: tapAreaWidth, map: mapView)
+            let (vertexIndex, vertexPoint) = try findVertexOn(feature: selectedFeature!, addingPoint: locationCoord, threshold: tapAreaWidth, map: mapView)
             guard vertexPoint != nil else { return }
             updateSelectedFeature(vertexIndex: vertexIndex!, newCoord: CLLocationCoordinate2D(latitude: vertexPoint!.y, longitude: vertexPoint!.x), addingPoint: true)
         } catch {
@@ -467,26 +476,28 @@ public class DrawBox: DisplayBox {
             lineFeatures[idx] = newFeature!
             updateMapLines()
         case .polygon:
-
-            let shapeInfo = getPolygonCooordinates(feature: shapeFeatures[idx], index: vertexIndex)
-            var coordArray = shapeInfo.modified
-            var innerArray = shapeInfo.inner
-            var outerArray = shapeInfo.outer
+            var (modifiedArray, outerArray, innerArray, innerIndex, newIndex) = getAllPolygonCooordinates(feature: shapeFeatures[idx], index: vertexIndex)
+            var coordArray = modifiedArray
+//            let localIndex = outerArray.count - 1
             
             coordArray.removeLast()
             if addingPoint {
-                coordArray.insert(newCoord, at: vertexIndex + 1)
-            } else {
-                coordArray[vertexIndex - outerArray.count] = newCoord
+                coordArray.insert(newCoord, at: newIndex + 1)
+            }
+//            else if vertexIndex >= localIndex {
+//                coordArray[vertexIndex - localIndex] = newCoord
+//            }
+            else {
+                coordArray[newIndex] = newCoord
             }
             coordArray.append(coordArray[0])
             
-            if outerArray == shapeInfo.modified {
+            if outerArray == modifiedArray {
                     outerArray = coordArray
             }
             else {
-                innerArray.remove(at: shapeInfo.innerIndex - 1)
-                innerArray.insert(coordArray, at: shapeInfo.innerIndex - 1)
+                innerArray.remove(at: innerIndex - 1)
+                innerArray.insert(coordArray, at: innerIndex - 1)
             }
             
             var ringArray: [Ring] = []
@@ -495,7 +506,6 @@ public class DrawBox: DisplayBox {
             }
         
             newFeature = Feature(geometry: Polygon(outerRing: Ring(coordinates: outerArray), innerRings: ringArray))
-                                 
             newFeature!.properties = selectedFeature!.properties
             shapeFeatures[idx] = newFeature!
             updateMapPolygons()

@@ -204,6 +204,12 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
         try! mapView.mapboxMap.style.updateGeoJSONSource(withId: sourceID, geoJSON: .featureCollection(features))
     }
     
+    func updateSelectedMapFeature(feature: Feature) {
+        selectedFeature = feature
+        let newFeatureCollection = FeatureCollection(features: [selectedFeature!])
+        updateMapSource(sourceID: selectedSourceIdentifier, features: newFeatureCollection)
+    }
+    
     //MARK: - Interaction
     
     func handleTap(_ gesture: UIGestureRecognizer) {
