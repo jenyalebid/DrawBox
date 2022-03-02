@@ -83,7 +83,7 @@ public class DrawBox: DisplayBox {
                 // removeLines()
             }
         case .dmEditAddVertex:
-            editMode = .none
+//            editMode = .none
             break
         case .dmAddHole:
             endAddingHoles()
@@ -178,6 +178,7 @@ public class DrawBox: DisplayBox {
     func handleControls(control: buttonControl) {
         switch control {
         case .none:
+            editMode = .none
             changeMode(.dmNONE)
             isVertexSelected = false
         case .addVertices:
@@ -312,6 +313,7 @@ public class DrawBox: DisplayBox {
                 var index: Int = 0
                 for coordSet in polygon.coordinates {
                     for coord in coordSet {
+                        print("Shape Coord:    ", coord)
                         var newFeature = Feature(geometry: .point(Point(coord)))
                         newFeature.properties = ["INDEX": JSONValue(String(index)),
                                                  "CURRENT": JSONValue("0")]
@@ -397,6 +399,7 @@ public class DrawBox: DisplayBox {
                 switch result {
                 case .success(let queriedfeatures):
                     if let firstFeature = queriedfeatures.first?.feature {
+                        self.handleControls(control: .none)
                         self.setCurrentVertex(vertexFeature: firstFeature)
                         if self.isLongStarted {
                             self.startVertexOffset(position: tapPoint)

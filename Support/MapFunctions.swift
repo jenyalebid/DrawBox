@@ -104,6 +104,7 @@ func getPoints(feature: Turf.Feature) throws -> [GEOSwift.Point] {
         //let geoPolygon
         let geoPolygon = try convert_Turf2Geos_Polygon(polygon)
         var pointArray = geoPolygon.exterior.points
+        
         pointArray.removeLast()
         let holes = geoPolygon.holes
         for hole in holes {
