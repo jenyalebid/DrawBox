@@ -55,6 +55,7 @@ public class DrawBox: DisplayBox {
 //            isVertexAdding = true
 //            setCurrentVertex(vertexFeature: nil)
         case .dmAddHole:
+            isVertexSelected = false
             supportPointsArray = []
             supportPointFeatures = []
             let newFeatureCollection = FeatureCollection(features: [])
@@ -100,6 +101,7 @@ public class DrawBox: DisplayBox {
         if isDrawModeEnabled {
             if currentMode != .dmNONE {
                 drawModeTapHandler(gesture)
+                isVertexSelected = false
                 return
             }
             if isEditingStarted {
@@ -172,7 +174,6 @@ public class DrawBox: DisplayBox {
         if currentMode == .dmAddHole {
             addHole()
         }
-
     }
     
     func handleControls(control: buttonControl) {
@@ -187,6 +188,9 @@ public class DrawBox: DisplayBox {
             return
         case .deleteVertex:
             deleteFeaturePoint()
+            if currentMode != .dmEditAddVertex {
+                editMode = .none
+            }
         case .deleteFeature:
             return
         case .addHole:
@@ -232,32 +236,16 @@ public class DrawBox: DisplayBox {
     }
     
     func endAddingHoles() {
-        lineFeatures.removeLast()
-        updateMapLines()
-        editMode = .none
+        if !lineFeatures.isEmpty {
+            lineFeatures.removeLast()
+            updateMapLines()
+        }
+        if editMode == .addHole {
+            editMode = .none
+        }
         removeSupportPoints()
         createEditingVertex4SelectedFeature()
     }
-    
-    //V1
-//     potential isolated feature feature?
-//    func addHole() {
-//        if supportPointsArray.count < 3 { return }
-//        if supportPointsArray.count >= 4 {
-//            shapeFeatures.removeAll { feature in
-//                feature.properties?["TYPE"] == "temp"
-//            }
-//        }
-//        isGeometryChanged = true
-//        var points = supportPointsArray
-//        points.append(supportPointsArray.first!)
-//
-//        let innerRing = Ring(coordinates: points)
-//        let outerRing = Ring(coordinates: getCoordinates(feature: selectedFeature!))
-//        var newFeature = Feature(geometry: .polygon(Polygon(outerRing: outerRing, innerRings: [innerRing])))
-//        newFeature.properties = ["TYPE": "temp"]
-//        updateMapPolygons(feature: newFeature)
-//    }
     
     func addShape() {
         if supportPointsArray.count < 3 { return }
@@ -399,7 +387,7 @@ public class DrawBox: DisplayBox {
                 switch result {
                 case .success(let queriedfeatures):
                     if let firstFeature = queriedfeatures.first?.feature {
-                        self.handleControls(control: .none)
+//                        self.handleControls(control: .none)
                         self.setCurrentVertex(vertexFeature: firstFeature)
                         if self.isLongStarted {
                             self.startVertexOffset(position: tapPoint)
@@ -675,6 +663,7 @@ public class DrawBox: DisplayBox {
         editMode = .none
         currentMode = .dmNONE
         isEditingStarted = false
+        isVertexSelected = false
         removeSupportPoints()
     }
 }

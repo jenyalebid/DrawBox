@@ -37,15 +37,15 @@ public struct DrawBoxView: View {
                 }
                 else {
                     HStack(spacing: 10) {
-                        MapButton(voidAction: viewModel.editing, highlighted: viewModel.drawBox.isEditingStarted, label: "Editing", image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
+                        MapButton(voidAction: viewModel.editing, highlighted: viewModel.drawBox.isEditingStarted, label: "Stop Editing", image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
                         MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
                         
                         if viewModel.drawBox.isEditingStarted && drawType != "Point" {
-                            MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), label: "Vertices", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
+                            MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), label: "End Vertex Adding", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
                         }
                         
                         if viewModel.drawBox.isEditingStarted && drawType == "Polygon" {
-                            MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: "Stop Adding", image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
+                            MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: "End Cutting", image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
                         }
                     }
                     .padding()
@@ -96,10 +96,12 @@ struct MapButton: View {
             }
         } label: {
             HStack {
-                Image(systemName: image)
-                    .foregroundColor(highlighted ? Color.white : selectedColor)
+                if !highlighted {
+                    Image(systemName: image)
+                        .foregroundColor(highlighted ? Color.white : selectedColor)
+                }
                 if highlighted && !label.isEmpty {
-                    Text(label).font(.footnote).foregroundColor(Color.white)
+                    Text("\(label)").font(.footnote).foregroundColor(Color.white)
                 }
             }
         }
