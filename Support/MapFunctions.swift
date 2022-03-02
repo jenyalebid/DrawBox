@@ -137,9 +137,9 @@ func findVertexOn(feature: Turf.Feature, addingPoint point: LocationCoordinate2D
 
     let p = points[1] //point on feature side
     let shapePoints = try getPoints(feature: feature)
-    for i in 0..<shapePoints.count - 1 {
+    for i in 0..<shapePoints.count {
         let lp1 = shapePoints[i]
-        let lp2 = shapePoints[i+1]
+        let lp2 = shapePoints[i==shapePoints.count-1 ? 0 : i+1]
         let d = scalarProduct(fromPoint: p, lp1, lp2)
         // finding MIN near 0 value (means we are on the side of feature) AND we need the point lies between two nearby vertex
         if d < minScalarProduct && ((lp1.x <= p.x && p.x <= lp2.x) || (lp1.x >= p.x && p.x >= lp2.x))
