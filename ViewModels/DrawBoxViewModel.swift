@@ -48,6 +48,10 @@ class DrawBoxViewModel: ObservableObject {
         }
     }
     
+    func showNotice() {
+        
+    }
+    
     func toggleControl(control: DrawBox.buttonControl) {
         if drawBox.editMode == control {
             drawBox.editMode = .none

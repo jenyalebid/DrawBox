@@ -102,19 +102,10 @@ func getPoints(feature: Turf.Feature) throws -> [[GEOSwift.Point]] {
         return [try convert_Turf2Geos_LineString(line).points]
     case .polygon(let polygon):
         let geoPolygon = try convert_Turf2Geos_Polygon(polygon)
-        var exteriorPoints = geoPolygon.exterior.points
-//        exteriorPoints.removeLast()
-        
-        var holePoints: [GEOSwift.Point] = []
-        
-        let holes = geoPolygon.holes
-        for hole in holes {
-            holePoints.append(contentsOf: hole.points)
-//            holePoints.removeLast()
+        var allArray: [[GEOSwift.Point]] = [geoPolygon.exterior.points]
+        for hole in geoPolygon.holes {
+            allArray.append(hole.points)
         }
-        var allArray: [[GEOSwift.Point]] = []
-        allArray.append(exteriorPoints)
-        allArray.append(holePoints)
         return allArray
     default:
         assertionFailure()
@@ -125,7 +116,7 @@ func getPoints(feature: Turf.Feature) throws -> [[GEOSwift.Point]] {
 func findVertexOn(feature: Turf.Feature, addingPoint point: LocationCoordinate2D, threshold: Double, map: MapView) throws -> (Int?, GPoint?) {
     let pgeom = try GGeometry(wkt: "POINT(\(point.longitude) \(point.latitude))")
     let geom = try convert_Turf2Geos_Feature(feature)?.geometry
-    let points = try pgeom.nearestPoints(with: geom!)
+    let points = try pgeom.nearestPoints(with: geom!) // provided function is not working properly finding points inside polygon. TODO: make better custom function?
     guard points.count == 2 else { return (nil, nil) }
         
     // a point either on side or not to whitch will be added a new point
@@ -134,6 +125,10 @@ func findVertexOn(feature: Turf.Feature, addingPoint point: LocationCoordinate2D
     let screenPoint1 = map.mapboxMap.point(for: CLLocationCoordinate2D(latitude: points[0].y, longitude: points[0].x))
     // get distance between two screen points
     let d = distance(screenPoint0, screenPoint1)
+    // if point is inside polygon
+    if d == 0 {
+        return (nil, nil)
+    }
     // if distance between points is more than treshhold place point on where user clicked, else place point on slope line
     let addingToSide = d < threshold
     let vertexPoint = addingToSide ? points[1] : points[0]
@@ -159,11 +154,10 @@ func findVertexOn(feature: Turf.Feature, addingPoint point: LocationCoordinate2D
                 return (vertexIndex, vertexPoint)
             }
         }
-        arrayCount = array.count - 1
+        arrayCount += array.count - 1
     }
-    return (0, vertexPoint)
+    return (nil, nil)
 }
-
 
 func distance(_ p1: CGPoint, _ p2: CGPoint) -> Double {
     return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2))
@@ -173,17 +167,14 @@ func scalarProduct(fromPoint p: GPoint, _ l1: GPoint, _ l2: GPoint) -> Double {
     return abs((p.x-l1.x)*(l2.y-l1.y) - (p.y-l1.y)*(l2.x-l1.x))
 }
 
-
+// Alternative
 //for i in 0...array.count {
 //    if i > 0 && i != array.count {
-//
 //        let s1 = Double(round(100000 * ((array[i].y - array[i - 1].y) / (array[i].x - array[i - 1].x))) / 100000)
 //        let s2 = Double(round(100000 * ((points[1].y - array[i - 1].y) / (points[1].x - array[i - 1].x))) / 100000)
 //        let s3 =  Double(round(100000 * ((array[i].y - points[1].y) / (array[i].x - points[1].x))) / 100000)
 //
 //        if s1 == s2 && s2 == s3 {
-//
-//
 //            vertexIndex = i + arrayCount
 //            return (vertexIndex, vertexPoint)
 //        }

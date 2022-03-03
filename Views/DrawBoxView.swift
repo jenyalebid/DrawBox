@@ -17,6 +17,7 @@ public struct DrawBoxView: View {
     @Binding var changes: Bool
     
     @State var showAlert = false
+    @State var noticeDuration  = 1.0
     
     public init(drawBox: DrawBox, drawType: String, geometry: Binding<String?>?, changes: Binding<Bool>) {
         self.viewModel = DrawBoxViewModel(drawBox: drawBox)
@@ -28,30 +29,23 @@ public struct DrawBoxView: View {
     public var body: some View {
         ZStack(alignment: .bottom) {
             MapDisplayView(geometry: [geometry], drawBox: viewModel.drawBox)
-            Group {
-                if !viewModel.drawBox.isFeatureSelected {
-                    HStack(spacing: 10) {
-                        MapButton(voidAction: viewModel.editing, drawingShape: true, highlighted: viewModel.startedDrawing, label: "\(drawType)", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
-                    }
-                    .padding()
+            VStack {
+                if viewModel.drawBox.showNotice {
+                    NoticeBar(text: "Cannot Add Vertex Inside Polygon", duration: 1, isShowing: $viewModel.drawBox.showNotice)
                 }
-                else {
-                    HStack(spacing: 10) {
-                        MapButton(voidAction: viewModel.editing, highlighted: viewModel.drawBox.isEditingStarted, label: "Stop Editing", image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
-                        MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
-                        
-                        if viewModel.drawBox.isEditingStarted && drawType != "Point" {
-                            MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), label: "End Vertex Adding", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
-                        }
-                        
-                        if viewModel.drawBox.isEditingStarted && drawType == "Polygon" {
-                            MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: "End Cutting", image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
-                        }
+                Spacer()
+                Group {
+                    if !viewModel.drawBox.isFeatureSelected {
+                        addButton
                     }
-                    .padding()
+                    else {
+                        editButtons
+                    }
                 }
+                .padding(.bottom)
             }
-            .padding(.bottom)
+
+            
         }
         .onDisappear {
             viewModel.onDisappear()
@@ -62,6 +56,28 @@ public struct DrawBoxView: View {
         }
         .navigationTitle("Draw \(drawType)")
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    public var editButtons: some View {
+        HStack(spacing: 10) {
+            MapButton(voidAction: viewModel.editing, highlighted: viewModel.drawBox.isEditingStarted, label: "Stop Editing", image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
+            MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
+            
+            if viewModel.drawBox.isEditingStarted && drawType != "Point" {
+                MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), label: "End Vertex Adding", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
+            }
+            if viewModel.drawBox.isEditingStarted && drawType == "Polygon" {
+                MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: "End Cutting", image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
+            }
+        }
+        .padding()
+    }
+    
+    public var addButton: some View {
+        HStack(spacing: 10) {
+            MapButton(voidAction: viewModel.editing, drawingShape: true, highlighted: viewModel.startedDrawing, label: "\(drawType)", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
+        }
+        .padding()
     }
 }
 
@@ -120,5 +136,35 @@ struct MapButton: View {
             )
         }
     }
+}
+
+struct NoticeBar: View {
     
+    var text: String
+    var duration: Double
+    
+    @State private var opacity = 1.0
+    @Binding var isShowing: Bool
+
+    
+    var body: some View {
+        ZStack {
+            Text("\(text)")
+                .foregroundColor(Color(UIColor.label))
+        }
+        .padding()
+        .background(Color(UIColor.white))
+        .cornerRadius(5)
+        .padding()
+        .opacity(opacity)
+        .onAppear {
+            Timer.scheduledTimer(withTimeInterval: duration, repeats: false) { timer in
+                withAnimation {
+                    opacity = 0
+                    isShowing = false
+                }
+                timer.invalidate()
+            }
+        }
+    }
 }

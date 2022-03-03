@@ -25,6 +25,8 @@ public class InitBox: NSObject, ObservableObject {
     @Published var isFeatureSelected = false
     @Published var isEditingStarted = false
     @Published var isVertexSelected = false
+    
+    @Published var showNotice = false
 //    @Published var isFeatureDeleting = false
 
 //    @Published var isVertexDeleting = false
