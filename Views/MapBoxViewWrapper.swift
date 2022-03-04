@@ -27,7 +27,7 @@ public class MapViewController: UIViewController {
         self.init()
         self.viewModel = viewModel
     }
-    
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,10 +35,9 @@ public class MapViewController: UIViewController {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestAlwaysAuthorization()
-        
         let resourceOptions = ResourceOptions(accessToken: "pk.eyJ1IjoiamVueWFsZWJpZCIsImEiOiJja3Y2dDZ2cnQyZDUzMm9xMXl2enR0ODJxIn0.CADXy6tenwyGeBU9Yimv5A")
         let mapOptions = MapOptions(optimizeForTerrain: true)
-        let myMapInitOptions = MapInitOptions(resourceOptions: resourceOptions, mapOptions: mapOptions, cameraOptions: locationOptions(locationManager: locationManager))
+        let myMapInitOptions = MapInitOptions(resourceOptions: resourceOptions, mapOptions: mapOptions, cameraOptions: locationOptions(locationManager: locationManager), styleURI: mapStyle())
         viewModel.mapView = MapView(frame: view.bounds, mapInitOptions: myMapInitOptions)
         viewModel.mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
@@ -52,6 +51,10 @@ public class MapViewController: UIViewController {
         viewModel.mapView.mapboxMap.onNext(.mapLoaded) { _ in
             self.viewModel.onMapLoaded()
         }
+    }
+    
+    func mapStyle() -> StyleURI {
+        return StyleURI(rawValue: UserDefaults.standard.object(forKey: "mapStyle") as? String ?? "terrain") ?? StyleURI.outdoors
     }
     
     func geometryCenter() -> CLLocationCoordinate2D? {

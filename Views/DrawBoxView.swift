@@ -27,11 +27,12 @@ public struct DrawBoxView: View {
     }
     
     public var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .bottomLeading) {
             MapDisplayView(geometry: [geometry], drawBox: viewModel.drawBox)
             VStack {
                 if viewModel.drawBox.showNotice {
                     NoticeBar(text: "Cannot Add Vertex Inside Polygon", duration: 1, isShowing: $viewModel.drawBox.showNotice)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
                 Spacer()
                 Group {
@@ -39,10 +40,13 @@ public struct DrawBoxView: View {
                         addButton
                     }
                     else {
-                        editButtons
+                        withAnimation {
+                            editButtons
+                        }
                     }
                 }
-                .padding(.bottom)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 24.0)
             }
 
             
@@ -58,26 +62,23 @@ public struct DrawBoxView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-    public var editButtons: some View {
-        HStack(spacing: 10) {
-            MapButton(voidAction: viewModel.editing, highlighted: viewModel.drawBox.isEditingStarted, label: "Stop Editing", image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
-            MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
-            
-            if viewModel.drawBox.isEditingStarted && drawType != "Point" {
-                MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), label: "End Vertex Adding", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
-            }
+    private var editButtons: some View {
+        VStack(alignment: .leading, spacing: 10) {
             if viewModel.drawBox.isEditingStarted && drawType == "Polygon" {
                 MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: "End Cutting", image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
             }
+            if viewModel.drawBox.isEditingStarted && drawType != "Point" {
+                MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), label: "End Vertex Adding", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
+            }
+            MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
+            MapButton(voidAction: viewModel.editing, highlighted: viewModel.drawBox.isEditingStarted, label: "Stop Editing", image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
         }
         .padding()
     }
     
-    public var addButton: some View {
-        HStack(spacing: 10) {
-            MapButton(voidAction: viewModel.editing, drawingShape: true, highlighted: viewModel.startedDrawing, label: "\(drawType)", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
-        }
-        .padding()
+    private var addButton: some View {
+        MapButton(voidAction: viewModel.editing, drawingShape: true, highlighted: viewModel.startedDrawing, label: "End \(drawType)", image: "plus", drawType: "\(drawType)", showAlert: $showAlert).environmentObject(viewModel)
+            .padding()
     }
 }
 
@@ -95,17 +96,21 @@ struct MapButton: View {
     
     var defaultColor: Color = Color(UIColor.systemBackground)
     var selectedColor: Color = Color.blue
+    var drawType: String = ""
     
     @Binding var showAlert: Bool
     
     var body: some View {
         Button {
             if drawingShape {
-                viewModel.drawing(type: label)
+                withAnimation {
+                    viewModel.drawing(type: drawType)
+                }
             }
             else {
-                voidAction()
-                
+                withAnimation {
+                    voidAction()
+                }
             }
             if viewModel.drawBox.editMode == .deleteFeature {
                 showAlert = true
@@ -121,6 +126,7 @@ struct MapButton: View {
                 }
             }
         }
+        .frame(minWidth: 25, idealHeight: 25, maxHeight: 25)
         .padding()
         .background(highlighted ? selectedColor : defaultColor).cornerRadius(50)
         .alert(isPresented: $showAlert) { () -> Alert in
@@ -153,8 +159,8 @@ struct NoticeBar: View {
                 .foregroundColor(Color(UIColor.label))
         }
         .padding()
-        .background(Color(UIColor.white))
-        .cornerRadius(5)
+        .background(Color(UIColor.systemBackground))
+        .cornerRadius(50)
         .padding()
         .opacity(opacity)
         .onAppear {

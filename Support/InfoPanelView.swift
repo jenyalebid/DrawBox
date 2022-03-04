@@ -50,6 +50,7 @@ struct InfoPanelView: View {
                                 .padding([.bottom, .leading, .trailing], 6.0)
                         }
                     }
+                    .buttonStyle(BorderlessButtonStyle())
                 }
                 if panelWidth > 200 {
                     VStack(alignment: .leading, spacing: 10) {

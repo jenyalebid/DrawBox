@@ -56,9 +56,9 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
         }
         
         try! mapView.mapboxMap.style.addSource(selectedSource, id: selectedSourceIdentifier)
-        try! mapView.mapboxMap.style.addLayer(shapeLayer, layerPosition: .below("user-support-point-layer"))
-        try! mapView.mapboxMap.style.addLayer(lineLayer, layerPosition: .below("user-support-point-layer"))
-        try! mapView.mapboxMap.style.addLayer(pointLayer, layerPosition: .below("user-support-point-layer"))
+        try! mapView.mapboxMap.style.addPersistentLayer(shapeLayer, layerPosition: .below("user-support-point-layer"))
+        try! mapView.mapboxMap.style.addPersistentLayer(lineLayer, layerPosition: .below("user-support-point-layer"))
+        try! mapView.mapboxMap.style.addPersistentLayer(pointLayer, layerPosition: .below("user-support-point-layer"))
     }
 
     func makeEditSources() {
@@ -104,13 +104,13 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
         })
         
         try! mapView.mapboxMap.style.addSource(shapeSource, id: shapeSourceIdentifier)
-        try! mapView.mapboxMap.style.addLayer(shapeLayer)
+        try! mapView.mapboxMap.style.addPersistentLayer(shapeLayer)
         try! mapView.mapboxMap.style.addSource(lineSource, id: lineSourceIdentifier)
-        try! mapView.mapboxMap.style.addLayer(lineLayer)
+        try! mapView.mapboxMap.style.addPersistentLayer(lineLayer)
         try! mapView.mapboxMap.style.addSource(pointSource, id: pointSourceIdentifier)
-        try! mapView.mapboxMap.style.addLayer(pointLayer)
+        try! mapView.mapboxMap.style.addPersistentLayer(pointLayer)
         try! mapView.mapboxMap.style.addSource(supportPointsSource, id: supportPointSourceIdentifier)
-        try! mapView.mapboxMap.style.addLayer(supportPointLayer)
+        try! mapView.mapboxMap.style.addPersistentLayer(supportPointLayer)
 
         editableLayerIDs.append(pointLayer.id)
         editableLayerIDs.append(lineLayer.id)
@@ -154,6 +154,15 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
             if zoomToFeature {
                 mapView.mapboxMap.setCamera(to: mapView.mapboxMap.camera(for: Geometry(feature.geometry!), padding: UIEdgeInsets(top: 100, left: 100, bottom: 100, right: 100), bearing: nil, pitch: nil))
             }
+        }
+    }
+    
+    func changeStyle(style: String) {
+        switch style {
+        case "satellite":
+            mapView.mapboxMap.style.uri = StyleURI(rawValue: "mapbox://styles/jenyalebid/cl0coo2tx001k14lekimelnmn")!
+        default:
+            mapView.mapboxMap.style.uri =  StyleURI(rawValue: "mapbox://styles/jenyalebid/cl0cokslp002k14pxtz30z7yy")!
         }
     }
     

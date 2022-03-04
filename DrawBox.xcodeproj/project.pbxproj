@@ -30,6 +30,7 @@
 		B107393F27C02D520045B328 /* Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107393A27C02D510045B328 /* Display.swift */; };
 		B107394227C02DC20045B328 /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = B107394127C02DC20045B328 /* MapboxMaps */; };
 		B107394527C02E050045B328 /* GEOSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B107394427C02E050045B328 /* GEOSwift */; };
+		B16A3C8D27D2D99D003E631A /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A3C8C27D2D99D003E631A /* NotesView.swift */; };
 		B177400D27C45EE7001FE140 /* InfoPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B177400C27C45EE7001FE140 /* InfoPanelView.swift */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,7 @@
 		B107393927C02D510045B328 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		B107393A27C02D510045B328 /* Display.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Display.swift; sourceTree = "<group>"; };
 		B107394727C040CA0045B328 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B16A3C8C27D2D99D003E631A /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		B177400C27C45EE7001FE140 /* InfoPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPanelView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,6 +127,7 @@
 				B107391E27C02D410045B328 /* GEOSwift2Turf.swift */,
 				B107391F27C02D410045B328 /* THPButton.swift */,
 				B107392027C02D410045B328 /* DraggableView.swift */,
+				B16A3C8C27D2D99D003E631A /* NotesView.swift */,
 				B107392127C02D410045B328 /* Turf2GEOSwift.swift */,
 				B107392227C02D410045B328 /* MapFunctions.swift */,
 				B177400C27C45EE7001FE140 /* InfoPanelView.swift */,
@@ -236,6 +239,7 @@
 				B107393D27C02D520045B328 /* Draw.swift in Sources */,
 				B107393E27C02D520045B328 /* Track.swift in Sources */,
 				B107393227C02D410045B328 /* DrawBoxView.swift in Sources */,
+				B16A3C8D27D2D99D003E631A /* NotesView.swift in Sources */,
 				B107392C27C02D410045B328 /* CameraLocationConsumer.swift in Sources */,
 				B107392E27C02D410045B328 /* THPButton.swift in Sources */,
 				B107392F27C02D410045B328 /* DraggableView.swift in Sources */,

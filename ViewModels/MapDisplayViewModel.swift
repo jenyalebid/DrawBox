@@ -6,9 +6,10 @@
 //
 
 import MapboxMaps
+import Combine
 
 class MapDisplayViewModel: ObservableObject {
-    
+
     var mapView: MapView!
     var displayBox: DisplayBox
     
@@ -54,6 +55,11 @@ class MapDisplayViewModel: ObservableObject {
         else {
             displayBox.startTacking()
         }
+    }
+    
+    func changeMapStyle(style: String) {
+        UserDefaults.standard.set(style, forKey: "mapStyle")
+        displayBox.changeStyle(style: style)
     }
     
     func showInfo() -> String? {

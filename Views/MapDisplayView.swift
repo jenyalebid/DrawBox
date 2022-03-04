@@ -32,14 +32,17 @@ public struct MapDisplayView: View {
                         .padding(.top, 45)
                 }
                 Spacer()
-                LocationButton(highlighted: viewModel.displayBox.locationTracking, action: viewModel.moveToUserLocation)
-                    .padding([.bottom, .trailing], 8.0)
+                Group {
+                    MapLayerType().environmentObject(viewModel)
+                    LocationButton(highlighted: viewModel.displayBox.locationTracking, action: viewModel.moveToUserLocation)
+                }
+                .padding([.bottom, .trailing], 8.0)
             }
         }
     }
 }
 
-struct LocationButton: View {
+private struct LocationButton: View {
     
     var highlighted: Bool = false
     let action: () -> Void
@@ -49,12 +52,69 @@ struct LocationButton: View {
             action()
         } label: {
             if highlighted {
-                Image(systemName: "location.fill").font(.headline)
+                Image(systemName: "location.fill")
+                    .frame(width: 30, height: 30)
             }
             else {
-                Image(systemName: "location").font(.headline)
+                Image(systemName: "location")
+                    .frame(width: 30, height: 30)
+
             }
         }
+        .padding(8.0)
+        .background(Color(UIColor.systemBackground)).cornerRadius(50)
+        .buttonStyle(BorderlessButtonStyle())
+    }
+}
+
+private struct MapLayerType: View {
+    
+    @State var buttonClick = false
+    @EnvironmentObject var viewModel: MapDisplayViewModel
+    
+    var body: some View {
+        HStack {
+            if buttonClick {
+                layerSelection
+            }
+            layerButton
+        }
+    }
+    
+    var layerButton: some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                buttonClick.toggle()
+            }
+        } label: {
+            Image(systemName: "map")
+                .frame(width: 30, height: 30)
+        }
+        .padding(8.0)
+        .background(Color(UIColor.systemBackground)).cornerRadius(50)
+        .buttonStyle(BorderlessButtonStyle())
+    }
+    
+    var layerSelection: some View {
+        let currentStyle = UserDefaults.standard.object(forKey: "mapStyle") as? String ?? "terrain"
+        return HStack {
+            Button {
+                viewModel.changeMapStyle(style: "terrain")
+                buttonClick.toggle()
+            } label: {
+                Text("Terrain")
+            }
+            .disabled(currentStyle == "terrain")
+            Divider()
+            Button {
+                viewModel.changeMapStyle(style: "satellite")
+                buttonClick.toggle()
+            } label: {
+                Text("Satellite")
+            }
+            .disabled(currentStyle == "satellite")
+        }
+        .frame(height: 30)
         .padding(8.0)
         .background(Color(UIColor.systemBackground)).cornerRadius(50)
         .buttonStyle(BorderlessButtonStyle())

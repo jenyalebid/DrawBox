@@ -58,7 +58,7 @@ public class InitBox: NSObject, ObservableObject {
     var isGeometryChanged = false
     var isGeometryLoaded = false
     internal var isLongStarted: Bool = false
-
+    
     
     internal let tapAreaWidth = 20.0 // width of area under finger while finding features and annotationns on gestures processing
     internal var gestureLong: UILongPressGestureRecognizer?
