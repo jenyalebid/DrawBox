@@ -27,6 +27,7 @@ public class InitBox: NSObject, ObservableObject {
     @Published var isVertexSelected = false
     
     @Published var showNotice = false
+    @Published var toastText = "Edit Mode"
 //    @Published var isFeatureDeleting = false
 
 //    @Published var isVertexDeleting = false

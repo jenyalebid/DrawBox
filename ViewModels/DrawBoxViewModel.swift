@@ -6,6 +6,7 @@
 //
 
 import MapboxMaps
+import Combine
 
 class DrawBoxViewModel: ObservableObject {
     
@@ -13,6 +14,7 @@ class DrawBoxViewModel: ObservableObject {
     
     @Published var startedDrawing = false
     @Published var location = false
+    @Published var toastText = "Edit Mode"
         
     var deleteText: String = ""
     var editMode = DrawBox.buttonControl.none
@@ -48,8 +50,17 @@ class DrawBoxViewModel: ObservableObject {
         }
     }
     
-    func showNotice() {
-        
+    func editText() -> String {
+        switch drawBox.editMode {
+        case .addHole:
+            return "Cutting Mode"
+        case .addVertices:
+            return "Vertex Add Mode"
+        case .deleteMode:
+            return "Bulk Delete Mode"
+        default:
+            return "Edit Mode"
+        }
     }
     
     func toggleControl(control: DrawBox.buttonControl) {
@@ -59,6 +70,7 @@ class DrawBoxViewModel: ObservableObject {
         else {
             drawBox.editMode = control
         }
+        toastText = editText()
         drawBox.changeMode(.dmNONE)
         drawBox.handleControls(control: drawBox.editMode)
     }

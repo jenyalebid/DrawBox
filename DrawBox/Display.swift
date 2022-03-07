@@ -121,11 +121,14 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
     }
     
     //MARK: - Load Data
-    
+    var allFeatures: [Feature] = []
+
     func loadFeatures(features: [Feature]) {
         guard !isGeometryLoaded else { return }
         
         for feature in features {
+            allFeatures.append(feature)
+            
             var newFeature = feature
             selectedFeature = feature
             switch feature.geometry {
@@ -149,10 +152,34 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
         isGeometryLoaded = true
     }
     
+//    func showAllFeatures() {
+//        
+//        let n: CLLocationCoordinate2D
+//        let e: CLLocationCoordinate2D
+//        let s: CLLocationCoordinate2D
+//        let w: CLLocationCoordinate2D
+//        
+//        var coordinate: CLLocationCoordinate2D
+//        
+//        for feature in allFeatures {
+//            switch feature.geometry {
+//            case .polygon(let polygon):
+//                coordinate = polygon.centroid!
+//            case .lineString(let line):
+//                coordinate = line.coordinates[line.coordinates.count / 2]
+//            case .point(let point):
+//                coordinate = point.coordinates
+//            default:
+//                assertionFailure()
+//            }
+//        }
+//    }
+    
     func mapZoom() {
         if let feature = selectedFeature {
             if zoomToFeature {
                 mapView.mapboxMap.setCamera(to: mapView.mapboxMap.camera(for: Geometry(feature.geometry!), padding: UIEdgeInsets(top: 100, left: 100, bottom: 100, right: 100), bearing: nil, pitch: nil))
+//                mapView.mapboxMap.setCameraBounds(with: CameraBoundsOptions(bounds: CoordinateBounds(, maxZoom: <#T##CGFloat?#>, minZoom: <#T##CGFloat?#>, maxPitch: <#T##CGFloat?#>, minPitch: <#T##CGFloat?#>))
             }
         }
     }

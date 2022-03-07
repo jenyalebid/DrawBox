@@ -17,7 +17,6 @@ public struct DrawBoxView: View {
     @Binding var changes: Bool
     
     @State var showAlert = false
-    @State var noticeDuration  = 1.0
     
     public init(drawBox: DrawBox, drawType: String, geometry: Binding<String?>?, changes: Binding<Bool>) {
         self.viewModel = DrawBoxViewModel(drawBox: drawBox)
@@ -35,20 +34,25 @@ public struct DrawBoxView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
                 Spacer()
-                Group {
-                    if !viewModel.drawBox.isFeatureSelected {
-                        addButton
-                    }
-                    else {
-                        withAnimation {
-                            editButtons
+                ZStack(alignment: .bottom) {
+                    NoticeBar(text: viewModel.drawBox.toastText, persistant: true, customOpacity: 0.75, isShowing: $viewModel.drawBox.isEditingStarted)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    Group {
+                        if !viewModel.drawBox.isFeatureSelected {
+                            addButton
                         }
+                        else {
+                            withAnimation {
+                                editButtons
+                            }
+                        }
+                        
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 24.0)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom, 24.0)
             }
-
+            
             
         }
         .onDisappear {
@@ -89,7 +93,7 @@ struct MapButton: View {
     let voidAction: () -> Void
     
     var drawingShape = false
-    var highlighted: Bool = false
+    var highlighted = false
     
     let label: String
     let image: String
@@ -116,15 +120,8 @@ struct MapButton: View {
                 showAlert = true
             }
         } label: {
-            HStack {
-                if !highlighted {
-                    Image(systemName: image)
-                        .foregroundColor(highlighted ? Color.white : selectedColor)
-                }
-                if highlighted && !label.isEmpty {
-                    Text("\(label)").font(.footnote).foregroundColor(Color.white)
-                }
-            }
+            Image(systemName: image)
+                .foregroundColor(highlighted ? Color.white : selectedColor)
         }
         .frame(minWidth: 25, idealHeight: 25, maxHeight: 25)
         .padding()
@@ -147,29 +144,36 @@ struct MapButton: View {
 struct NoticeBar: View {
     
     var text: String
-    var duration: Double
+    var duration: Double = 1
+    var persistant = false
+    var customOpacity: Double?
     
-    @State private var opacity = 1.0
+    @State var opacity = 1.0
     @Binding var isShowing: Bool
-
+    
     
     var body: some View {
-        ZStack {
-            Text("\(text)")
-                .foregroundColor(Color(UIColor.label))
-        }
-        .padding()
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(50)
-        .padding()
-        .opacity(opacity)
-        .onAppear {
-            Timer.scheduledTimer(withTimeInterval: duration, repeats: false) { timer in
-                withAnimation {
-                    opacity = 0
-                    isShowing = false
+        if isShowing {
+            ZStack {
+                Text("\(text)")
+                    .foregroundColor(Color(UIColor.label))
+                    .font(.caption)
+            }
+            .padding()
+            .background(Color(UIColor.systemBackground))
+            .cornerRadius(50)
+            .padding()
+            .opacity((customOpacity == nil ? opacity : customOpacity)!)
+            .onAppear {
+                if !persistant {
+                    Timer.scheduledTimer(withTimeInterval: duration, repeats: false) { timer in
+                        withAnimation {
+                            opacity = 0
+                            isShowing = false
+                        }
+                        timer.invalidate()
+                    }
                 }
-                timer.invalidate()
             }
         }
     }

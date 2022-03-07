@@ -177,12 +177,15 @@ public class DrawBox: DisplayBox {
     func handleControls(control: buttonControl) {
         switch control {
         case .none:
+            toastText = "Edit Mode"
             editMode = .none
             changeMode(.dmNONE)
             isVertexSelected = false
         case .addVertices:
+            toastText = "Vertex Add Mode"
             changeMode(.dmEditAddVertex)
         case .deleteMode:
+            toastText = "Vertex Delete Mode"
             return
         case .deleteVertex:
             deleteFeaturePoint()
@@ -192,11 +195,11 @@ public class DrawBox: DisplayBox {
         case .deleteFeature:
             return
         case .addHole:
+            toastText = "Geometry Cutting Mode"
             changeMode(.dmAddHole)
         }
     }
     
-    // TODO: Add holes to shapes feature
     func addHole() {
         if supportPointsArray.count < 3 { return }
         if supportPointsArray.count >= 4 {
