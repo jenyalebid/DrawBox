@@ -28,8 +28,9 @@
 		B107393D27C02D520045B328 /* Draw.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107393827C02D510045B328 /* Draw.swift */; };
 		B107393E27C02D520045B328 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107393927C02D510045B328 /* Track.swift */; };
 		B107393F27C02D520045B328 /* Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = B107393A27C02D510045B328 /* Display.swift */; };
-		B107394227C02DC20045B328 /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = B107394127C02DC20045B328 /* MapboxMaps */; };
-		B107394527C02E050045B328 /* GEOSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B107394427C02E050045B328 /* GEOSwift */; };
+		B1478C4127D81BCB009CDB42 /* GEOSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1478C4027D81BCB009CDB42 /* GEOSwift.framework */; };
+		B1478C4427D81BDC009CDB42 /* MapboxMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1478C4327D81BDC009CDB42 /* MapboxMaps.framework */; };
+		B1478C4827D81BF1009CDB42 /* geos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1478C4727D81BF1009CDB42 /* geos.framework */; };
 		B16A3C8D27D2D99D003E631A /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A3C8C27D2D99D003E631A /* NotesView.swift */; };
 		B177400D27C45EE7001FE140 /* InfoPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B177400C27C45EE7001FE140 /* InfoPanelView.swift */; };
 /* End PBXBuildFile section */
@@ -58,6 +59,117 @@
 		B107393927C02D510045B328 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		B107393A27C02D510045B328 /* Display.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Display.swift; sourceTree = "<group>"; };
 		B107394727C040CA0045B328 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B1478BC927D81BB6009CDB42 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		B1478BCA27D81BB6009CDB42 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		B1478BCE27D81BB6009CDB42 /* ClosednessTestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosednessTestable.swift; sourceTree = "<group>"; };
+		B1478BCF27D81BB6009CDB42 /* MultiPolygon+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiPolygon+GEOS.swift"; sourceTree = "<group>"; };
+		B1478BD027D81BB6009CDB42 /* Geometry+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Geometry+GEOS.swift"; sourceTree = "<group>"; };
+		B1478BD127D81BB6009CDB42 /* Boundable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Boundable.swift; sourceTree = "<group>"; };
+		B1478BD227D81BB6009CDB42 /* MultiPoint+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiPoint+GEOS.swift"; sourceTree = "<group>"; };
+		B1478BD327D81BB6009CDB42 /* GEOSObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOSObject.swift; sourceTree = "<group>"; };
+		B1478BD427D81BB6009CDB42 /* MultiLineString+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiLineString+GEOS.swift"; sourceTree = "<group>"; };
+		B1478BD527D81BB6009CDB42 /* WKBInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKBInitializable.swift; sourceTree = "<group>"; };
+		B1478BD627D81BB6009CDB42 /* GEOSContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOSContext.swift; sourceTree = "<group>"; };
+		B1478BD727D81BB6009CDB42 /* Point+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Point+GEOS.swift"; sourceTree = "<group>"; };
+		B1478BD827D81BB6009CDB42 /* WKTConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKTConvertible.swift; sourceTree = "<group>"; };
+		B1478BD927D81BB6009CDB42 /* GeometryConvertible+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeometryConvertible+GEOS.swift"; sourceTree = "<group>"; };
+		B1478BDA27D81BB6009CDB42 /* WKTInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKTInitializable.swift; sourceTree = "<group>"; };
+		B1478BDB27D81BB6009CDB42 /* Polygon+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polygon+GEOS.swift"; sourceTree = "<group>"; };
+		B1478BDC27D81BB6009CDB42 /* GEOSHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOSHelpers.swift; sourceTree = "<group>"; };
+		B1478BDD27D81BB6009CDB42 /* GEOSError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOSError.swift; sourceTree = "<group>"; };
+		B1478BDE27D81BB6009CDB42 /* GeometryCollection+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeometryCollection+GEOS.swift"; sourceTree = "<group>"; };
+		B1478BDF27D81BB6009CDB42 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
+		B1478BE027D81BB6009CDB42 /* Envelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Envelope.swift; sourceTree = "<group>"; };
+		B1478BE127D81BB6009CDB42 /* WKBConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKBConvertible.swift; sourceTree = "<group>"; };
+		B1478BE227D81BB6009CDB42 /* SimplicityTestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplicityTestable.swift; sourceTree = "<group>"; };
+		B1478BE327D81BB6009CDB42 /* LineString+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LineString+GEOS.swift"; sourceTree = "<group>"; };
+		B1478BE427D81BB6009CDB42 /* LineStringConvertible+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LineStringConvertible+GEOS.swift"; sourceTree = "<group>"; };
+		B1478BE627D81BB6009CDB42 /* CodableGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableGeometry.swift; sourceTree = "<group>"; };
+		B1478BE727D81BB6009CDB42 /* MultiPolygon+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiPolygon+Codable.swift"; sourceTree = "<group>"; };
+		B1478BE827D81BB6009CDB42 /* MultiLineString+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiLineString+Codable.swift"; sourceTree = "<group>"; };
+		B1478BE927D81BB6009CDB42 /* GeometryCollection+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeometryCollection+Codable.swift"; sourceTree = "<group>"; };
+		B1478BEA27D81BB6009CDB42 /* Feature+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Feature+Codable.swift"; sourceTree = "<group>"; };
+		B1478BEB27D81BB6009CDB42 /* Point+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Point+Codable.swift"; sourceTree = "<group>"; };
+		B1478BEC27D81BB6009CDB42 /* MultiPoint+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiPoint+Codable.swift"; sourceTree = "<group>"; };
+		B1478BED27D81BB6009CDB42 /* GeoJSON+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeoJSON+Codable.swift"; sourceTree = "<group>"; };
+		B1478BEE27D81BB6009CDB42 /* Geometry+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Geometry+Codable.swift"; sourceTree = "<group>"; };
+		B1478BEF27D81BB6009CDB42 /* FeatureCollection+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureCollection+Codable.swift"; sourceTree = "<group>"; };
+		B1478BF027D81BB6009CDB42 /* GeoJSONType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoJSONType.swift; sourceTree = "<group>"; };
+		B1478BF127D81BB6009CDB42 /* Polygon+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polygon+Codable.swift"; sourceTree = "<group>"; };
+		B1478BF227D81BB6009CDB42 /* JSON+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSON+Codable.swift"; sourceTree = "<group>"; };
+		B1478BF327D81BB6009CDB42 /* LineString+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LineString+Codable.swift"; sourceTree = "<group>"; };
+		B1478BF427D81BB6009CDB42 /* GEOSwiftError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOSwiftError.swift; sourceTree = "<group>"; };
+		B1478BF627D81BB6009CDB42 /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		B1478BF727D81BB6009CDB42 /* Feature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feature.swift; sourceTree = "<group>"; };
+		B1478BF827D81BB6009CDB42 /* GeometryConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryConvertible.swift; sourceTree = "<group>"; };
+		B1478BF927D81BB6009CDB42 /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+		B1478BFA27D81BB6009CDB42 /* FeatureCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureCollection.swift; sourceTree = "<group>"; };
+		B1478BFB27D81BB6009CDB42 /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
+		B1478BFC27D81BB6009CDB42 /* LineStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineStringConvertible.swift; sourceTree = "<group>"; };
+		B1478BFD27D81BB6009CDB42 /* GeoJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoJSON.swift; sourceTree = "<group>"; };
+		B1478BFE27D81BB6009CDB42 /* MultiPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPoint.swift; sourceTree = "<group>"; };
+		B1478BFF27D81BB6009CDB42 /* GeometryCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryCollection.swift; sourceTree = "<group>"; };
+		B1478C0027D81BB6009CDB42 /* LineString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineString.swift; sourceTree = "<group>"; };
+		B1478C0127D81BB6009CDB42 /* Polygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
+		B1478C0227D81BB6009CDB42 /* MultiLineString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiLineString.swift; sourceTree = "<group>"; };
+		B1478C0327D81BB6009CDB42 /* MultiPolygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPolygon.swift; sourceTree = "<group>"; };
+		B1478C0527D81BBE009CDB42 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		B1478C0627D81BBE009CDB42 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		B1478C0A27D81BBE009CDB42 /* ClosednessTestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosednessTestable.swift; sourceTree = "<group>"; };
+		B1478C0B27D81BBE009CDB42 /* MultiPolygon+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiPolygon+GEOS.swift"; sourceTree = "<group>"; };
+		B1478C0C27D81BBE009CDB42 /* Geometry+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Geometry+GEOS.swift"; sourceTree = "<group>"; };
+		B1478C0D27D81BBE009CDB42 /* Boundable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Boundable.swift; sourceTree = "<group>"; };
+		B1478C0E27D81BBE009CDB42 /* MultiPoint+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiPoint+GEOS.swift"; sourceTree = "<group>"; };
+		B1478C0F27D81BBE009CDB42 /* GEOSObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOSObject.swift; sourceTree = "<group>"; };
+		B1478C1027D81BBE009CDB42 /* MultiLineString+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiLineString+GEOS.swift"; sourceTree = "<group>"; };
+		B1478C1127D81BBE009CDB42 /* WKBInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKBInitializable.swift; sourceTree = "<group>"; };
+		B1478C1227D81BBE009CDB42 /* GEOSContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOSContext.swift; sourceTree = "<group>"; };
+		B1478C1327D81BBE009CDB42 /* Point+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Point+GEOS.swift"; sourceTree = "<group>"; };
+		B1478C1427D81BBE009CDB42 /* WKTConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKTConvertible.swift; sourceTree = "<group>"; };
+		B1478C1527D81BBE009CDB42 /* GeometryConvertible+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeometryConvertible+GEOS.swift"; sourceTree = "<group>"; };
+		B1478C1627D81BBE009CDB42 /* WKTInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKTInitializable.swift; sourceTree = "<group>"; };
+		B1478C1727D81BBE009CDB42 /* Polygon+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polygon+GEOS.swift"; sourceTree = "<group>"; };
+		B1478C1827D81BBE009CDB42 /* GEOSHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOSHelpers.swift; sourceTree = "<group>"; };
+		B1478C1927D81BBE009CDB42 /* GEOSError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOSError.swift; sourceTree = "<group>"; };
+		B1478C1A27D81BBE009CDB42 /* GeometryCollection+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeometryCollection+GEOS.swift"; sourceTree = "<group>"; };
+		B1478C1B27D81BBE009CDB42 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
+		B1478C1C27D81BBE009CDB42 /* Envelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Envelope.swift; sourceTree = "<group>"; };
+		B1478C1D27D81BBE009CDB42 /* WKBConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKBConvertible.swift; sourceTree = "<group>"; };
+		B1478C1E27D81BBE009CDB42 /* SimplicityTestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplicityTestable.swift; sourceTree = "<group>"; };
+		B1478C1F27D81BBE009CDB42 /* LineString+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LineString+GEOS.swift"; sourceTree = "<group>"; };
+		B1478C2027D81BBE009CDB42 /* LineStringConvertible+GEOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LineStringConvertible+GEOS.swift"; sourceTree = "<group>"; };
+		B1478C2227D81BBE009CDB42 /* CodableGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableGeometry.swift; sourceTree = "<group>"; };
+		B1478C2327D81BBE009CDB42 /* MultiPolygon+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiPolygon+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2427D81BBE009CDB42 /* MultiLineString+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiLineString+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2527D81BBE009CDB42 /* GeometryCollection+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeometryCollection+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2627D81BBE009CDB42 /* Feature+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Feature+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2727D81BBE009CDB42 /* Point+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Point+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2827D81BBE009CDB42 /* MultiPoint+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiPoint+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2927D81BBE009CDB42 /* GeoJSON+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeoJSON+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2A27D81BBE009CDB42 /* Geometry+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Geometry+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2B27D81BBE009CDB42 /* FeatureCollection+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureCollection+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2C27D81BBE009CDB42 /* GeoJSONType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoJSONType.swift; sourceTree = "<group>"; };
+		B1478C2D27D81BBE009CDB42 /* Polygon+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polygon+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2E27D81BBE009CDB42 /* JSON+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSON+Codable.swift"; sourceTree = "<group>"; };
+		B1478C2F27D81BBE009CDB42 /* LineString+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LineString+Codable.swift"; sourceTree = "<group>"; };
+		B1478C3027D81BBE009CDB42 /* GEOSwiftError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GEOSwiftError.swift; sourceTree = "<group>"; };
+		B1478C3227D81BBE009CDB42 /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		B1478C3327D81BBE009CDB42 /* Feature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feature.swift; sourceTree = "<group>"; };
+		B1478C3427D81BBE009CDB42 /* GeometryConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryConvertible.swift; sourceTree = "<group>"; };
+		B1478C3527D81BBE009CDB42 /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+		B1478C3627D81BBE009CDB42 /* FeatureCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureCollection.swift; sourceTree = "<group>"; };
+		B1478C3727D81BBE009CDB42 /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
+		B1478C3827D81BBE009CDB42 /* LineStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineStringConvertible.swift; sourceTree = "<group>"; };
+		B1478C3927D81BBE009CDB42 /* GeoJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoJSON.swift; sourceTree = "<group>"; };
+		B1478C3A27D81BBE009CDB42 /* MultiPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPoint.swift; sourceTree = "<group>"; };
+		B1478C3B27D81BBE009CDB42 /* GeometryCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryCollection.swift; sourceTree = "<group>"; };
+		B1478C3C27D81BBE009CDB42 /* LineString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineString.swift; sourceTree = "<group>"; };
+		B1478C3D27D81BBE009CDB42 /* Polygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
+		B1478C3E27D81BBE009CDB42 /* MultiLineString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiLineString.swift; sourceTree = "<group>"; };
+		B1478C3F27D81BBE009CDB42 /* MultiPolygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPolygon.swift; sourceTree = "<group>"; };
+		B1478C4027D81BCB009CDB42 /* GEOSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GEOSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1478C4327D81BDC009CDB42 /* MapboxMaps.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MapboxMaps.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1478C4727D81BF1009CDB42 /* geos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = geos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B16A3C8C27D2D99D003E631A /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		B177400C27C45EE7001FE140 /* InfoPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPanelView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -67,8 +179,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B107394527C02E050045B328 /* GEOSwift in Frameworks */,
-				B107394227C02DC20045B328 /* MapboxMaps in Frameworks */,
+				B1478C4427D81BDC009CDB42 /* MapboxMaps.framework in Frameworks */,
+				B1478C4127D81BCB009CDB42 /* GEOSwift.framework in Frameworks */,
+				B1478C4827D81BF1009CDB42 /* geos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +196,7 @@
 				B107391727C02D410045B328 /* ViewModels */,
 				B107391B27C02D410045B328 /* Support */,
 				B107390C27C02CBA0045B328 /* Products */,
+				B1478BC727D81BB5009CDB42 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -146,6 +260,222 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		B1478BC727D81BB5009CDB42 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B1478C4727D81BF1009CDB42 /* geos.framework */,
+				B1478C4327D81BDC009CDB42 /* MapboxMaps.framework */,
+				B1478C4027D81BCB009CDB42 /* GEOSwift.framework */,
+				B1478C0427D81BBE009CDB42 /* GEOSwift */,
+				B1478BC827D81BB6009CDB42 /* GEOSwift */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B1478BC827D81BB6009CDB42 /* GEOSwift */ = {
+			isa = PBXGroup;
+			children = (
+				B1478BC927D81BB6009CDB42 /* LICENSE */,
+				B1478BCA27D81BB6009CDB42 /* README.md */,
+				B1478BCB27D81BB6009CDB42 /* Sources */,
+			);
+			name = GEOSwift;
+			path = ../THPDataApp/Pods/GEOSwift;
+			sourceTree = "<group>";
+		};
+		B1478BCB27D81BB6009CDB42 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				B1478BCC27D81BB6009CDB42 /* GEOSwift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		B1478BCC27D81BB6009CDB42 /* GEOSwift */ = {
+			isa = PBXGroup;
+			children = (
+				B1478BCD27D81BB6009CDB42 /* GEOS */,
+				B1478BE527D81BB6009CDB42 /* Codable */,
+				B1478BF427D81BB6009CDB42 /* GEOSwiftError.swift */,
+				B1478BF527D81BB6009CDB42 /* Core Types */,
+			);
+			path = GEOSwift;
+			sourceTree = "<group>";
+		};
+		B1478BCD27D81BB6009CDB42 /* GEOS */ = {
+			isa = PBXGroup;
+			children = (
+				B1478BCE27D81BB6009CDB42 /* ClosednessTestable.swift */,
+				B1478BCF27D81BB6009CDB42 /* MultiPolygon+GEOS.swift */,
+				B1478BD027D81BB6009CDB42 /* Geometry+GEOS.swift */,
+				B1478BD127D81BB6009CDB42 /* Boundable.swift */,
+				B1478BD227D81BB6009CDB42 /* MultiPoint+GEOS.swift */,
+				B1478BD327D81BB6009CDB42 /* GEOSObject.swift */,
+				B1478BD427D81BB6009CDB42 /* MultiLineString+GEOS.swift */,
+				B1478BD527D81BB6009CDB42 /* WKBInitializable.swift */,
+				B1478BD627D81BB6009CDB42 /* GEOSContext.swift */,
+				B1478BD727D81BB6009CDB42 /* Point+GEOS.swift */,
+				B1478BD827D81BB6009CDB42 /* WKTConvertible.swift */,
+				B1478BD927D81BB6009CDB42 /* GeometryConvertible+GEOS.swift */,
+				B1478BDA27D81BB6009CDB42 /* WKTInitializable.swift */,
+				B1478BDB27D81BB6009CDB42 /* Polygon+GEOS.swift */,
+				B1478BDC27D81BB6009CDB42 /* GEOSHelpers.swift */,
+				B1478BDD27D81BB6009CDB42 /* GEOSError.swift */,
+				B1478BDE27D81BB6009CDB42 /* GeometryCollection+GEOS.swift */,
+				B1478BDF27D81BB6009CDB42 /* Circle.swift */,
+				B1478BE027D81BB6009CDB42 /* Envelope.swift */,
+				B1478BE127D81BB6009CDB42 /* WKBConvertible.swift */,
+				B1478BE227D81BB6009CDB42 /* SimplicityTestable.swift */,
+				B1478BE327D81BB6009CDB42 /* LineString+GEOS.swift */,
+				B1478BE427D81BB6009CDB42 /* LineStringConvertible+GEOS.swift */,
+			);
+			path = GEOS;
+			sourceTree = "<group>";
+		};
+		B1478BE527D81BB6009CDB42 /* Codable */ = {
+			isa = PBXGroup;
+			children = (
+				B1478BE627D81BB6009CDB42 /* CodableGeometry.swift */,
+				B1478BE727D81BB6009CDB42 /* MultiPolygon+Codable.swift */,
+				B1478BE827D81BB6009CDB42 /* MultiLineString+Codable.swift */,
+				B1478BE927D81BB6009CDB42 /* GeometryCollection+Codable.swift */,
+				B1478BEA27D81BB6009CDB42 /* Feature+Codable.swift */,
+				B1478BEB27D81BB6009CDB42 /* Point+Codable.swift */,
+				B1478BEC27D81BB6009CDB42 /* MultiPoint+Codable.swift */,
+				B1478BED27D81BB6009CDB42 /* GeoJSON+Codable.swift */,
+				B1478BEE27D81BB6009CDB42 /* Geometry+Codable.swift */,
+				B1478BEF27D81BB6009CDB42 /* FeatureCollection+Codable.swift */,
+				B1478BF027D81BB6009CDB42 /* GeoJSONType.swift */,
+				B1478BF127D81BB6009CDB42 /* Polygon+Codable.swift */,
+				B1478BF227D81BB6009CDB42 /* JSON+Codable.swift */,
+				B1478BF327D81BB6009CDB42 /* LineString+Codable.swift */,
+			);
+			path = Codable;
+			sourceTree = "<group>";
+		};
+		B1478BF527D81BB6009CDB42 /* Core Types */ = {
+			isa = PBXGroup;
+			children = (
+				B1478BF627D81BB6009CDB42 /* Geometry.swift */,
+				B1478BF727D81BB6009CDB42 /* Feature.swift */,
+				B1478BF827D81BB6009CDB42 /* GeometryConvertible.swift */,
+				B1478BF927D81BB6009CDB42 /* JSON.swift */,
+				B1478BFA27D81BB6009CDB42 /* FeatureCollection.swift */,
+				B1478BFB27D81BB6009CDB42 /* Point.swift */,
+				B1478BFC27D81BB6009CDB42 /* LineStringConvertible.swift */,
+				B1478BFD27D81BB6009CDB42 /* GeoJSON.swift */,
+				B1478BFE27D81BB6009CDB42 /* MultiPoint.swift */,
+				B1478BFF27D81BB6009CDB42 /* GeometryCollection.swift */,
+				B1478C0027D81BB6009CDB42 /* LineString.swift */,
+				B1478C0127D81BB6009CDB42 /* Polygon.swift */,
+				B1478C0227D81BB6009CDB42 /* MultiLineString.swift */,
+				B1478C0327D81BB6009CDB42 /* MultiPolygon.swift */,
+			);
+			path = "Core Types";
+			sourceTree = "<group>";
+		};
+		B1478C0427D81BBE009CDB42 /* GEOSwift */ = {
+			isa = PBXGroup;
+			children = (
+				B1478C0527D81BBE009CDB42 /* LICENSE */,
+				B1478C0627D81BBE009CDB42 /* README.md */,
+				B1478C0727D81BBE009CDB42 /* Sources */,
+			);
+			name = GEOSwift;
+			path = ../THPDataApp/Pods/GEOSwift;
+			sourceTree = "<group>";
+		};
+		B1478C0727D81BBE009CDB42 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				B1478C0827D81BBE009CDB42 /* GEOSwift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		B1478C0827D81BBE009CDB42 /* GEOSwift */ = {
+			isa = PBXGroup;
+			children = (
+				B1478C0927D81BBE009CDB42 /* GEOS */,
+				B1478C2127D81BBE009CDB42 /* Codable */,
+				B1478C3027D81BBE009CDB42 /* GEOSwiftError.swift */,
+				B1478C3127D81BBE009CDB42 /* Core Types */,
+			);
+			path = GEOSwift;
+			sourceTree = "<group>";
+		};
+		B1478C0927D81BBE009CDB42 /* GEOS */ = {
+			isa = PBXGroup;
+			children = (
+				B1478C0A27D81BBE009CDB42 /* ClosednessTestable.swift */,
+				B1478C0B27D81BBE009CDB42 /* MultiPolygon+GEOS.swift */,
+				B1478C0C27D81BBE009CDB42 /* Geometry+GEOS.swift */,
+				B1478C0D27D81BBE009CDB42 /* Boundable.swift */,
+				B1478C0E27D81BBE009CDB42 /* MultiPoint+GEOS.swift */,
+				B1478C0F27D81BBE009CDB42 /* GEOSObject.swift */,
+				B1478C1027D81BBE009CDB42 /* MultiLineString+GEOS.swift */,
+				B1478C1127D81BBE009CDB42 /* WKBInitializable.swift */,
+				B1478C1227D81BBE009CDB42 /* GEOSContext.swift */,
+				B1478C1327D81BBE009CDB42 /* Point+GEOS.swift */,
+				B1478C1427D81BBE009CDB42 /* WKTConvertible.swift */,
+				B1478C1527D81BBE009CDB42 /* GeometryConvertible+GEOS.swift */,
+				B1478C1627D81BBE009CDB42 /* WKTInitializable.swift */,
+				B1478C1727D81BBE009CDB42 /* Polygon+GEOS.swift */,
+				B1478C1827D81BBE009CDB42 /* GEOSHelpers.swift */,
+				B1478C1927D81BBE009CDB42 /* GEOSError.swift */,
+				B1478C1A27D81BBE009CDB42 /* GeometryCollection+GEOS.swift */,
+				B1478C1B27D81BBE009CDB42 /* Circle.swift */,
+				B1478C1C27D81BBE009CDB42 /* Envelope.swift */,
+				B1478C1D27D81BBE009CDB42 /* WKBConvertible.swift */,
+				B1478C1E27D81BBE009CDB42 /* SimplicityTestable.swift */,
+				B1478C1F27D81BBE009CDB42 /* LineString+GEOS.swift */,
+				B1478C2027D81BBE009CDB42 /* LineStringConvertible+GEOS.swift */,
+			);
+			path = GEOS;
+			sourceTree = "<group>";
+		};
+		B1478C2127D81BBE009CDB42 /* Codable */ = {
+			isa = PBXGroup;
+			children = (
+				B1478C2227D81BBE009CDB42 /* CodableGeometry.swift */,
+				B1478C2327D81BBE009CDB42 /* MultiPolygon+Codable.swift */,
+				B1478C2427D81BBE009CDB42 /* MultiLineString+Codable.swift */,
+				B1478C2527D81BBE009CDB42 /* GeometryCollection+Codable.swift */,
+				B1478C2627D81BBE009CDB42 /* Feature+Codable.swift */,
+				B1478C2727D81BBE009CDB42 /* Point+Codable.swift */,
+				B1478C2827D81BBE009CDB42 /* MultiPoint+Codable.swift */,
+				B1478C2927D81BBE009CDB42 /* GeoJSON+Codable.swift */,
+				B1478C2A27D81BBE009CDB42 /* Geometry+Codable.swift */,
+				B1478C2B27D81BBE009CDB42 /* FeatureCollection+Codable.swift */,
+				B1478C2C27D81BBE009CDB42 /* GeoJSONType.swift */,
+				B1478C2D27D81BBE009CDB42 /* Polygon+Codable.swift */,
+				B1478C2E27D81BBE009CDB42 /* JSON+Codable.swift */,
+				B1478C2F27D81BBE009CDB42 /* LineString+Codable.swift */,
+			);
+			path = Codable;
+			sourceTree = "<group>";
+		};
+		B1478C3127D81BBE009CDB42 /* Core Types */ = {
+			isa = PBXGroup;
+			children = (
+				B1478C3227D81BBE009CDB42 /* Geometry.swift */,
+				B1478C3327D81BBE009CDB42 /* Feature.swift */,
+				B1478C3427D81BBE009CDB42 /* GeometryConvertible.swift */,
+				B1478C3527D81BBE009CDB42 /* JSON.swift */,
+				B1478C3627D81BBE009CDB42 /* FeatureCollection.swift */,
+				B1478C3727D81BBE009CDB42 /* Point.swift */,
+				B1478C3827D81BBE009CDB42 /* LineStringConvertible.swift */,
+				B1478C3927D81BBE009CDB42 /* GeoJSON.swift */,
+				B1478C3A27D81BBE009CDB42 /* MultiPoint.swift */,
+				B1478C3B27D81BBE009CDB42 /* GeometryCollection.swift */,
+				B1478C3C27D81BBE009CDB42 /* LineString.swift */,
+				B1478C3D27D81BBE009CDB42 /* Polygon.swift */,
+				B1478C3E27D81BBE009CDB42 /* MultiLineString.swift */,
+				B1478C3F27D81BBE009CDB42 /* MultiPolygon.swift */,
+			);
+			path = "Core Types";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -175,8 +505,6 @@
 			);
 			name = DrawBox;
 			packageProductDependencies = (
-				B107394127C02DC20045B328 /* MapboxMaps */,
-				B107394427C02E050045B328 /* GEOSwift */,
 			);
 			productName = DrawBox;
 			productReference = B107390B27C02CBA0045B328 /* DrawBox.framework */;
@@ -206,8 +534,8 @@
 			);
 			mainGroup = B107390127C02CBA0045B328;
 			packageReferences = (
-				B107394027C02DC20045B328 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
-				B107394327C02E050045B328 /* XCRemoteSwiftPackageReference "GEOSwift" */,
+				B1478BC027D81599009CDB42 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
+				B1478BC327D815CE009CDB42 /* XCRemoteSwiftPackageReference "GEOSwift" */,
 			);
 			productRefGroup = B107390C27C02CBA0045B328 /* Products */;
 			projectDirPath = "";
@@ -393,6 +721,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DrawBox/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
@@ -425,6 +754,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DrawBox/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
@@ -471,7 +801,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B107394027C02DC20045B328 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
+		B1478BC027D81599009CDB42 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
 			requirement = {
@@ -479,7 +809,7 @@
 				minimumVersion = 10.3.0;
 			};
 		};
-		B107394327C02E050045B328 /* XCRemoteSwiftPackageReference "GEOSwift" */ = {
+		B1478BC327D815CE009CDB42 /* XCRemoteSwiftPackageReference "GEOSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/GEOSwift/GEOSwift.git";
 			requirement = {
@@ -488,19 +818,6 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		B107394127C02DC20045B328 /* MapboxMaps */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B107394027C02DC20045B328 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
-			productName = MapboxMaps;
-		};
-		B107394427C02E050045B328 /* GEOSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B107394327C02E050045B328 /* XCRemoteSwiftPackageReference "GEOSwift" */;
-			productName = GEOSwift;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B107390227C02CBA0045B328 /* Project object */;
 }

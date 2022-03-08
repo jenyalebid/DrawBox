@@ -148,38 +148,32 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
         updateMapSource(sourceID: pointSourceIdentifier, features: FeatureCollection(features: pointFeatures))
         updateMapSource(sourceID: lineSourceIdentifier, features: FeatureCollection(features: lineFeatures))
         updateMapSource(sourceID: shapeSourceIdentifier, features: FeatureCollection(features: shapeFeatures))
-
+        
         isGeometryLoaded = true
     }
     
-//    func showAllFeatures() {
-//        
-//        let n: CLLocationCoordinate2D
-//        let e: CLLocationCoordinate2D
-//        let s: CLLocationCoordinate2D
-//        let w: CLLocationCoordinate2D
-//        
-//        var coordinate: CLLocationCoordinate2D
-//        
-//        for feature in allFeatures {
-//            switch feature.geometry {
-//            case .polygon(let polygon):
-//                coordinate = polygon.centroid!
-//            case .lineString(let line):
-//                coordinate = line.coordinates[line.coordinates.count / 2]
-//            case .point(let point):
-//                coordinate = point.coordinates
-//            default:
-//                assertionFailure()
-//            }
-//        }
-//    }
+    func showAllFeatures() -> [CLLocationCoordinate2D] {
+        var centeriodCoordinates: [CLLocationCoordinate2D] = []
+        
+        for feature in allFeatures {
+            switch feature.geometry {
+            case .polygon(let polygon):
+                centeriodCoordinates.append(contentsOf: polygon.coordinates[0])
+            case .lineString(let line):
+                centeriodCoordinates.append(contentsOf: line.coordinates)
+            case .point(let point):
+                centeriodCoordinates.append(point.coordinates)
+            default:
+                assertionFailure()
+            }
+        }
+        return centeriodCoordinates
+    }
     
     func mapZoom() {
         if let feature = selectedFeature {
             if zoomToFeature {
                 mapView.mapboxMap.setCamera(to: mapView.mapboxMap.camera(for: Geometry(feature.geometry!), padding: UIEdgeInsets(top: 100, left: 100, bottom: 100, right: 100), bearing: nil, pitch: nil))
-//                mapView.mapboxMap.setCameraBounds(with: CameraBoundsOptions(bounds: CoordinateBounds(, maxZoom: <#T##CGFloat?#>, minZoom: <#T##CGFloat?#>, maxPitch: <#T##CGFloat?#>, minPitch: <#T##CGFloat?#>))
             }
         }
     }
@@ -191,6 +185,7 @@ public class DisplayBox: InitBox, UIGestureRecognizerDelegate {
         default:
             mapView.mapboxMap.style.uri =  StyleURI(rawValue: "mapbox://styles/jenyalebid/cl0cokslp002k14pxtz30z7yy")!
         }
+//        mapView.mapboxMap.setCamera(to: mapView.mapboxMap.camera(for: showAllFeatures(), padding: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10), bearing: nil, pitch: nil))
     }
     
     //MARK: - Update Map
