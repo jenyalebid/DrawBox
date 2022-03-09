@@ -46,7 +46,6 @@ public struct DrawBoxView: View {
                                 editButtons
                             }
                         }
-                        
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 24.0)
@@ -86,7 +85,7 @@ public struct DrawBoxView: View {
     }
 }
 
-struct MapButton: View {
+private struct MapButton: View {
     
     @EnvironmentObject var viewModel: DrawBoxViewModel
     
