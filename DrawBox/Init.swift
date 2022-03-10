@@ -16,6 +16,7 @@ enum DrawMode: Int {
     case dmAddTrack = 4
     case dmEditAddVertex = 11
     case dmAddHole = 5
+    case dmCut = 6
 }
 
 public class InitBox: NSObject, ObservableObject {
@@ -41,6 +42,7 @@ public class InitBox: NSObject, ObservableObject {
         case deleteMode = 3
         case deleteVertex = 4
         case deleteFeature = 5
+        case cut = 6
     }
     
     @Published var editMode = buttonControl.none

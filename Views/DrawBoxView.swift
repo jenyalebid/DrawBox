@@ -68,9 +68,10 @@ public struct DrawBoxView: View {
     private var editButtons: some View {
         VStack(alignment: .leading, spacing: 10) {
             if viewModel.drawBox.isEditingStarted && drawType == "Polygon" {
-                MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: "End Cutting", image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
+                MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: "End Cutting", image: "square.on.square.squareshape.controlhandles", showAlert: $showAlert).environmentObject(viewModel)
             }
             if viewModel.drawBox.isEditingStarted && drawType != "Point" {
+                MapButton(voidAction: viewModel.cutting, highlighted: viewModel.checkControl(control: .cut), label: "End Cutting", image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
                 MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), label: "End Vertex Adding", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
             }
             MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)

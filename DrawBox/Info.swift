@@ -32,6 +32,28 @@ extension DisplayBox {
             }
     }
     
+//    func insideShape(_ sender: UIGestureRecognizer) -> Bool {
+//        var foundFeature = false
+//        editableLayerIDs.append("user-select-shape-layer")
+//        let tapPoint = sender.location(in: mapView)
+//        let tapRect = CGRect(x: tapPoint.x-tapAreaWidth/2, y: tapPoint.y-tapAreaWidth/2, width: tapAreaWidth, height: tapAreaWidth)
+//        mapView.mapboxMap.queryRenderedFeatures(in: tapRect,
+//            options: RenderedQueryOptions(layerIds: editableLayerIDs, filter: nil)) { result in
+//                switch result {
+//                case .success(let queriedfeatures):
+//                    if ((queriedfeatures.first?.feature) != nil) {
+//                        foundFeature = true
+//                    }
+//                    else {
+//                        foundFeature = false
+//                    }
+//                case .failure(_):
+//                    foundFeature = false
+//                }
+//            }
+//        return foundFeature
+//    }
+    
     func selectFeature(feature: Feature?) {
         if let feature = feature {
             selectedFeature = getOriginalSelectedFeature(feature)
@@ -43,7 +65,7 @@ extension DisplayBox {
         }
         //clear selection in case feature == nil
         removeSupportPoints()
-        removeSeletedFeature()
+        removeSelectedFeature()
     }
     
     func getOriginalSelectedFeature(_ feature: Feature) -> Feature? {
@@ -59,7 +81,7 @@ extension DisplayBox {
         }
     }
     
-    func removeSeletedFeature() {
+    func removeSelectedFeature() {
         selectedFeature = nil
         if isFeatureSelected {
             isFeatureSelected = false

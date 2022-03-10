@@ -49,17 +49,14 @@ public class DrawBox: DisplayBox {
             break
         case .dmEditAddVertex:
             break
-//            editMode = .addVertices
-//            isVertexAdding = true
-//            setCurrentVertex(vertexFeature: nil)
         case .dmAddHole:
             isVertexSelected = false
             supportPointsArray = []
             supportPointFeatures = []
             let newFeatureCollection = FeatureCollection(features: [])
             updateMapSource(sourceID: supportPointSourceIdentifier, features: newFeatureCollection)
-//            editMode = .addHole
-//            isAddingHole = true
+            break
+        case .dmCut:
             break
         case .dmNONE:
             return
@@ -82,10 +79,11 @@ public class DrawBox: DisplayBox {
                 // removeLines()
             }
         case .dmEditAddVertex:
-//            editMode = .none
             break
         case .dmAddHole:
             endAddingHoles()
+        case .dmCut:
+            addCut()
         case .dmNONE:
             return
         }
@@ -123,9 +121,46 @@ public class DrawBox: DisplayBox {
             addLinePoint(locationCoord)
         case .dmEditAddVertex:
             addPointToSelectedFeature(locationCoord)
+        case .dmCut:
+//            if !insideShape(gesture) || !supportPointsArray.isEmpty {
+//            }
+//            else {
+//                showNotice = true
+//            }
+            addLinePoint(locationCoord)
         case .dmNONE:
             break
         default:
+            return
+        }
+    }
+    
+    func handleControls(control: buttonControl) {
+        switch control {
+        case .none:
+            toastText = "Edit Mode"
+            editMode = .none
+            changeMode(.dmNONE)
+            isVertexSelected = false
+        case .addVertices:
+            toastText = "Vertex Add Mode"
+            changeMode(.dmEditAddVertex)
+        case .deleteMode:
+            toastText = "Vertex Delete Mode"
+            return
+        case .deleteVertex:
+            deleteFeaturePoint()
+            if currentMode != .dmEditAddVertex {
+                editMode = .none
+            }
+        case .deleteFeature:
+            return
+        case .addHole:
+            toastText = "Hole Add Mode"
+            changeMode(.dmAddHole)
+        case .cut:
+            toastText = "Geometry Cut Mode"
+            changeMode(.dmCut)
             return
         }
     }
@@ -174,37 +209,39 @@ public class DrawBox: DisplayBox {
         }
     }
     
-    func handleControls(control: buttonControl) {
-        switch control {
-        case .none:
-            toastText = "Edit Mode"
-            editMode = .none
-            changeMode(.dmNONE)
-            isVertexSelected = false
-        case .addVertices:
-            toastText = "Vertex Add Mode"
-            changeMode(.dmEditAddVertex)
-        case .deleteMode:
-            toastText = "Vertex Delete Mode"
-            return
-        case .deleteVertex:
-            deleteFeaturePoint()
-            if currentMode != .dmEditAddVertex {
-                editMode = .none
-            }
-        case .deleteFeature:
-            return
-        case .addHole:
-            toastText = "Geometry Cutting Mode"
-            changeMode(.dmAddHole)
-        }
+    func removeSupportFeatures() {
+
     }
     
+    func addCut() {
+        if !lineFeatures.isEmpty {
+            lineFeatures.removeLast()
+            updateMapLines()
+        }
+        else {
+            return
+        }
+        
+        let poly = try! splitGeometry(feature: selectedFeature!, line: supportPointsArray, threshold: 20, map: mapView)
+        
+        var newFeature = Feature(geometry: .polygon(poly!))
+        newFeature.properties = ["TYPE": "temp"]
+        updateMapPolygons(feature: newFeature)
+//        guard selectedFeature != nil else { return }
+//        do {
+//            let (vertexIndex, vertexPoint) = try splitGeometry(feature: selectedFeature!, line: supportPointsArray, threshold: tapAreaWidth, map: mapView)
+//            guard vertexPoint != nil else {
+//                showNotice = true
+//                return
+//            }
+//            updateSelectedFeature(vertexIndex: vertexIndex!, newCoord: CLLocationCoordinate2D(latitude: vertexPoint!.y, longitude: vertexPoint!.x), addingPoint: true)
+//        } catch {
+//            print("ERROR adding point: \(error)")
+//        }
+    }
+
     func addHole() {
         if supportPointsArray.count < 3 { return }
-        if supportPointsArray.count >= 4 {
-        }
-
         isGeometryChanged = true
         
         var points = supportPointsArray
@@ -312,7 +349,6 @@ public class DrawBox: DisplayBox {
                     index -= 1
                     supportPointFeatures.removeLast()
                 }
-
             default:
                 return
             }
@@ -391,7 +427,6 @@ public class DrawBox: DisplayBox {
                 switch result {
                 case .success(let queriedfeatures):
                     if let firstFeature = queriedfeatures.first?.feature {
-//                        self.handleControls(control: .none)
                         self.setCurrentVertex(vertexFeature: firstFeature)
                         if self.isLongStarted {
                             self.startVertexOffset(position: tapPoint)
@@ -647,7 +682,6 @@ public class DrawBox: DisplayBox {
         default:
             return false
         }
-        
         clearEditingVertex()
         return false
     }

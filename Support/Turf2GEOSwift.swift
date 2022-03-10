@@ -30,7 +30,7 @@ func convert_Turf2Geos_Feature(_ turfFeature: Turf.Feature) throws -> GEOSwift.F
     return nil
 }
 
-private func convertCoordinateArray2GeosPointArray(_ turfPointArray: [LocationCoordinate2D]) -> [GEOSwift.Point] {
+func convertCoordinateArray2GeosPointArray(_ turfPointArray: [LocationCoordinate2D]) -> [GEOSwift.Point] {
     var result: [GPoint] = []
     for turfPoint in turfPointArray {
         result.append(GPoint(x: turfPoint.longitude, y: turfPoint.latitude))

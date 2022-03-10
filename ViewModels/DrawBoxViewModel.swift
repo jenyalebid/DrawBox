@@ -14,7 +14,6 @@ class DrawBoxViewModel: ObservableObject {
     
     @Published var startedDrawing = false
     @Published var location = false
-    @Published var toastText = "Edit Mode"
         
     var deleteText: String = ""
     var editMode = DrawBox.buttonControl.none
@@ -35,6 +34,8 @@ class DrawBoxViewModel: ObservableObject {
     }
 
     func drawing(type: String) {
+        drawBox.toastText = "Adding \(type)"
+        drawBox.isEditingStarted.toggle()
         switch type {
         case "Point":
             startedDrawing.toggle()
@@ -50,19 +51,6 @@ class DrawBoxViewModel: ObservableObject {
         }
     }
     
-    func editText() -> String {
-        switch drawBox.editMode {
-        case .addHole:
-            return "Cutting Mode"
-        case .addVertices:
-            return "Vertex Add Mode"
-        case .deleteMode:
-            return "Bulk Delete Mode"
-        default:
-            return "Edit Mode"
-        }
-    }
-    
     func toggleControl(control: DrawBox.buttonControl) {
         if drawBox.editMode == control {
             drawBox.editMode = .none
@@ -70,7 +58,6 @@ class DrawBoxViewModel: ObservableObject {
         else {
             drawBox.editMode = control
         }
-        toastText = editText()
         drawBox.changeMode(.dmNONE)
         drawBox.handleControls(control: drawBox.editMode)
     }
@@ -85,6 +72,7 @@ class DrawBoxViewModel: ObservableObject {
     func editing() {
         drawBox.isEditingStarted.toggle()
         if drawBox.isEditingStarted {
+            toggleControl(control: .none)
             drawBox.createEditingVertex4SelectedFeature()
         } else {
             drawBox.clearEditingVertex()
@@ -97,6 +85,10 @@ class DrawBoxViewModel: ObservableObject {
     
     func addingHole() {
         toggleControl(control: .addHole)
+    }
+    
+    func cutting() {
+        toggleControl(control: .cut)
     }
     
     func deleteFeature() {
