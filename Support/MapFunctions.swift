@@ -113,61 +113,36 @@ func getPoints(feature: Turf.Feature) throws -> [[GEOSwift.Point]] {
     return []
 }
 
-func splitGeometry(feature: Turf.Feature, line: [CLLocationCoordinate2D], threshold: Double, map: MapView) throws -> Turf.Polygon? {
-    let linePoints = convertCoordinateArray2GeosPointArray(line)
-    let pLine = try GEOSwift.LineString(points: linePoints)
-//    let pgeom = try GGeometry(wkt: "POINT(\(point.longitude) \(point.latitude))")
+func splitGeometry(feature: Turf.Feature, line: [CLLocationCoordinate2D]) throws -> GEOSwift.GeometryCollection? {
+    let pLine = try GEOSwift.LineString(points: convertCoordinateArray2GeosPointArray(line))
     let geom = try convert_Turf2Geos_Feature(feature)?.geometry
     let newGeo = try geom?.difference(with: pLine)
     
     switch newGeo?.geometry {
     case .polygon(let polygon):
-        print(polygon.exterior.points)
-        return convert_Geos2Turf_Polygon(polygon)
+        var counter = 0
+        var collection = try! polygon.boundary().union(with: pLine).polygonize()
+        for geometry in collection.geometries {
+            switch geometry {
+            case .polygon(let cutPolygon):
+                for hole in polygon.holes {
+                    if hole.points.reversed() == cutPolygon.exterior.points {
+                        collection.geometries.remove(at: counter)
+                        counter -= 1
+                    }
+                }
+            default:
+                assertionFailure()
+            }
+            counter += 1
+        }
+        return collection
     case .lineString(let line):
-        print(line.points)
+        let newPolyg = try! line.boundary().union(with: pLine).polygonize()
+        return newPolyg
     default:
         assertionFailure()
     }
-//    guard points.count == 2 else { return (nil, nil) }
-//
-//    // a point either on side or not to whitch will be added a new point
-//    // convert nearest points to position on screen
-//    let screenPoint0 = map.mapboxMap.point(for: CLLocationCoordinate2D(latitude: points[1].y, longitude: points[1].x))
-//    let screenPoint1 = map.mapboxMap.point(for: CLLocationCoordinate2D(latitude: points[0].y, longitude: points[0].x))
-//    // get distance between two screen points
-//    let d = distance(screenPoint0, screenPoint1)
-//    // if point is inside polygon
-//    if d == 0 {
-//        return (nil, nil)
-//    }
-//    // if distance between points is more than treshhold place point on where user clicked, else place point on slope line
-//    let addingToSide = d < threshold
-//    let vertexPoint = addingToSide ? points[1] : points[0]
-//
-//    var minScalarProduct = Double.greatestFiniteMagnitude
-//    var vertexIndex = 0
-//
-//    let p = points[1] //point on feature side
-//
-//    let shapePoints = try getPoints(feature: feature)
-//    var arrayCount = 0
-//
-//    for array in shapePoints {
-//        for i in 0..<array.count {
-//            let lp1 = array[i]
-//            let lp2 = array[i == array.count - 1 ? 0 : i + 1]
-//            let d = scalarProduct(fromPoint: p, lp1, lp2)
-//            // finding MIN near 0 value (means we are on the side of feature) AND we need the point lies between two nearby vertex
-//            if d < minScalarProduct && ((lp1.x <= p.x && p.x <= lp2.x) || (lp1.x >= p.x && p.x >= lp2.x))
-//                                    && ((lp1.y <= p.y && p.y <= lp2.y) || (lp1.y >= p.y && p.y >= lp2.y)) {
-//                minScalarProduct = d
-//                vertexIndex = i + arrayCount
-//                return (vertexIndex, vertexPoint)
-//            }
-//        }
-//        arrayCount += array.count - 1
-//    }
     return nil
 }
 

@@ -68,20 +68,20 @@ public struct DrawBoxView: View {
     private var editButtons: some View {
         VStack(alignment: .leading, spacing: 10) {
             if viewModel.drawBox.isEditingStarted && drawType == "Polygon" {
-                MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: "End Cutting", image: "square.on.square.squareshape.controlhandles", showAlert: $showAlert).environmentObject(viewModel)
+                MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: Font.title2, image: "squareshape.squareshape.dashed", showAlert: $showAlert).environmentObject(viewModel)
             }
             if viewModel.drawBox.isEditingStarted && drawType != "Point" {
-                MapButton(voidAction: viewModel.cutting, highlighted: viewModel.checkControl(control: .cut), label: "End Cutting", image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
-                MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), label: "End Vertex Adding", image: "plus", showAlert: $showAlert).environmentObject(viewModel)
+                MapButton(voidAction: viewModel.cutting, highlighted: viewModel.checkControl(control: .cut), image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
+                MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), image: "plus", showAlert: $showAlert).environmentObject(viewModel)
             }
-            MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), label: "\(viewModel.deleteText)", image: "trash", selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
-            MapButton(voidAction: viewModel.editing, highlighted: viewModel.drawBox.isEditingStarted, label: "Stop Editing", image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
+            MapButton(voidAction: viewModel.delete, highlighted: viewModel.deleteType(), image: "trash", selectedColor: Color.red, showAlert: $showAlert).environmentObject(viewModel)
+            MapButton(voidAction: viewModel.editing, highlighted: viewModel.drawBox.isEditingStarted, image: "square.and.pencil", showAlert: $showAlert).environmentObject(viewModel)
         }
         .padding()
     }
     
     private var addButton: some View {
-        MapButton(voidAction: viewModel.editing, drawingShape: true, highlighted: viewModel.startedDrawing, label: "End \(drawType)", image: "plus", drawType: "\(drawType)", showAlert: $showAlert).environmentObject(viewModel)
+        MapButton(voidAction: viewModel.editing, drawingShape: true, highlighted: viewModel.startedDrawing, image: "plus", drawType: "\(drawType)", showAlert: $showAlert).environmentObject(viewModel)
             .padding()
     }
 }
@@ -95,7 +95,7 @@ private struct MapButton: View {
     var drawingShape = false
     var highlighted = false
     
-    let label: String
+    var label: Font = .body
     let image: String
     
     var defaultColor: Color = Color(UIColor.systemBackground)
@@ -122,6 +122,7 @@ private struct MapButton: View {
         } label: {
             Image(systemName: image)
                 .foregroundColor(highlighted ? Color.white : selectedColor)
+                .font(label)
         }
         .frame(minWidth: 25, idealHeight: 25, maxHeight: 25)
         .padding()

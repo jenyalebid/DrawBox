@@ -50,13 +50,10 @@ public class DrawBox: DisplayBox {
         case .dmEditAddVertex:
             break
         case .dmAddHole:
-            isVertexSelected = false
-            supportPointsArray = []
-            supportPointFeatures = []
-            let newFeatureCollection = FeatureCollection(features: [])
-            updateMapSource(sourceID: supportPointSourceIdentifier, features: newFeatureCollection)
+            removeSupportFeatures()
             break
         case .dmCut:
+            removeSupportFeatures()
             break
         case .dmNONE:
             return
@@ -87,6 +84,7 @@ public class DrawBox: DisplayBox {
         case .dmNONE:
             return
         }
+        
         currentMode = .dmNONE
     }
 
@@ -210,34 +208,62 @@ public class DrawBox: DisplayBox {
     }
     
     func removeSupportFeatures() {
-
+        isVertexSelected = false
+        supportPointsArray = []
+        supportPointFeatures = []
+        let newFeatureCollection = FeatureCollection(features: [])
+        updateMapSource(sourceID: supportPointSourceIdentifier, features: newFeatureCollection)
     }
     
     func addCut() {
+        guard validateCut() else { return }
+        
+        let splitShapes = try! splitGeometry(feature: selectedFeature!, line: supportPointsArray)
+        let idx = getFeatureIndex(feature: selectedFeature!)
+        shapeFeatures.remove(at: idx)
+        removeSelectedFeature()
+                
+        for shape in splitShapes!.geometries {
+            switch shape {
+            case .lineString(let line):
+                var newFeature = Feature(geometry: .lineString(convert_Geos2Turf_LineString(line)))
+                newFeature.properties = ["TYPE": "Line",
+                                         "ID": JSONValue(UUID().uuidString)]
+                updateMapLines(feature: newFeature)
+            case .polygon(let polygon):
+                
+//                newFeature = Feature(geometry: Polygon(outerRing: Ring(coordinates: outerArray), innerRings: ringArray))
+//                newFeature.properties = selectedFeature!.properties
+//                shapeFeatures[idx] = newFeature
+//                updateMapPolygons()
+                
+                let turfPolygon = convert_Geos2Turf_Polygon(polygon)
+                var newFeature = Feature(geometry: Polygon(outerRing: turfPolygon.outerRing, innerRings: turfPolygon.innerRings))
+                newFeature.properties = ["TYPE": "Polygon",
+                                      "ID": JSONValue(UUID().uuidString)]
+                updateMapPolygons(feature: newFeature)
+            default:
+                return
+            }
+        }
+        removeSupportPoints()
+        clearEditingVertex()
+    }
+    
+    func validateCut() -> Bool {
         if !lineFeatures.isEmpty {
             lineFeatures.removeLast()
             updateMapLines()
         }
         else {
-            return
+            removeSupportPoints()
+            createEditingVertex4SelectedFeature()
+            return false
         }
-        
-        let poly = try! splitGeometry(feature: selectedFeature!, line: supportPointsArray, threshold: 20, map: mapView)
-        
-        var newFeature = Feature(geometry: .polygon(poly!))
-        newFeature.properties = ["TYPE": "temp"]
-        updateMapPolygons(feature: newFeature)
-//        guard selectedFeature != nil else { return }
-//        do {
-//            let (vertexIndex, vertexPoint) = try splitGeometry(feature: selectedFeature!, line: supportPointsArray, threshold: tapAreaWidth, map: mapView)
-//            guard vertexPoint != nil else {
-//                showNotice = true
-//                return
-//            }
-//            updateSelectedFeature(vertexIndex: vertexIndex!, newCoord: CLLocationCoordinate2D(latitude: vertexPoint!.y, longitude: vertexPoint!.x), addingPoint: true)
-//        } catch {
-//            print("ERROR adding point: \(error)")
+//        if editMode == .cut {
+//            editMode = .none
 //        }
+        return true
     }
 
     func addHole() {
@@ -272,6 +298,7 @@ public class DrawBox: DisplayBox {
         let newFeatureCollection = FeatureCollection(features: [selectedFeature!])
         updateMapSource(sourceID: selectedSourceIdentifier, features: newFeatureCollection)
     }
+    
     
     func endAddingHoles() {
         if !lineFeatures.isEmpty {
