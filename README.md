@@ -1,6 +1,6 @@
 # ``DrawBox``
 
-MapBox geometry drawing and editing.
+MapBox iOS geometry drawing and editing.
 
 ## Overview
 
