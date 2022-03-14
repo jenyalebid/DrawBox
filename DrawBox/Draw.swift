@@ -55,6 +55,8 @@ public class DrawBox: DisplayBox {
         case .dmCut:
             removeSupportFeatures()
             break
+        case .dmUnion:
+            break
         case .dmNONE:
             return
         }
@@ -81,6 +83,8 @@ public class DrawBox: DisplayBox {
             endAddingHoles()
         case .dmCut:
             addCut()
+        case .dmUnion:
+            break
         case .dmNONE:
             return
         }
@@ -116,16 +120,21 @@ public class DrawBox: DisplayBox {
         case .dmAddShape:
             addLinePoint(locationCoord)
         case .dmAddHole:
-            addLinePoint(locationCoord)
+            break
+//            insideSelectedPolygon(gesture) { result in
+//                if result {
+//                    self.addLinePoint(locationCoord)
+//                }
+//                else {
+//                    self.showNotice = true
+//                }
+//            }
         case .dmEditAddVertex:
             addPointToSelectedFeature(locationCoord)
         case .dmCut:
-//            if !insideShape(gesture) || !supportPointsArray.isEmpty {
-//            }
-//            else {
-//                showNotice = true
-//            }
             addLinePoint(locationCoord)
+        case .dmUnion:
+            findFeatures(gesture)
         case .dmNONE:
             break
         default:
@@ -159,6 +168,10 @@ public class DrawBox: DisplayBox {
         case .cut:
             toastText = "Geometry Cut Mode"
             changeMode(.dmCut)
+            return
+        case .union:
+            toastText = "Union Mode"
+            changeMode(.dmUnion)
             return
         }
     }
@@ -311,6 +324,20 @@ public class DrawBox: DisplayBox {
         removeSupportPoints()
         createEditingVertex4SelectedFeature()
     }
+    
+//    func makeUnion() {
+//        guard selectedFeature != nil && unionFeature != nil else {
+//            return
+//        }
+//        let newFeature = makeUnionFeature(feature1: selectedFeature!, feature2: unionFeature!)
+//
+//        shapeFeatures.remove(at: getFeatureIndex(feature: selectedFeature!))
+//        shapeFeatures.remove(at: getFeatureIndex(feature: unionFeature!))
+//        selectedFeature = newFeature
+//        updateMapPolygons(feature: newFeature)
+//        let newFeatureCollection = FeatureCollection(features: [selectedFeature!])
+//        updateMapSource(sourceID: selectedSourceIdentifier, features: newFeatureCollection)
+//    }
     
     func addShape() {
         if supportPointsArray.count < 3 { return }

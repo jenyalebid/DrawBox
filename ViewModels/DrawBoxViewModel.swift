@@ -91,6 +91,10 @@ class DrawBoxViewModel: ObservableObject {
         toggleControl(control: .cut)
     }
     
+    func union() {
+        toggleControl(control: .union)
+    }
+    
     func deleteFeature() {
         drawBox.deleteSelectedFeature()
     }

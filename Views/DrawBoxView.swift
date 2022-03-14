@@ -30,7 +30,7 @@ public struct DrawBoxView: View {
             MapDisplayView(geometry: [geometry], drawBox: viewModel.drawBox)
             VStack {
                 if viewModel.drawBox.showNotice {
-                    NoticeBar(text: "Cannot Add Vertex Inside Polygon", duration: 1, isShowing: $viewModel.drawBox.showNotice)
+                    NoticeBar(text: "Invalid Point Placement", duration: 1, isShowing: $viewModel.drawBox.showNotice)
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
                 Spacer()
@@ -68,9 +68,10 @@ public struct DrawBoxView: View {
     private var editButtons: some View {
         VStack(alignment: .leading, spacing: 10) {
             if viewModel.drawBox.isEditingStarted && drawType == "Polygon" {
-                MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: Font.title2, image: "squareshape.squareshape.dashed", showAlert: $showAlert).environmentObject(viewModel)
+                MapButton(voidAction: viewModel.addingHole, highlighted: viewModel.checkControl(control: .addHole), label: Font.title2, image: "dot.squareshape.fill", showAlert: $showAlert).environmentObject(viewModel)
             }
             if viewModel.drawBox.isEditingStarted && drawType != "Point" {
+                MapButton(voidAction: viewModel.union, highlighted: viewModel.checkControl(control: .union), label: Font.title2, image: "square.on.square.squareshape.controlhandles", showAlert: $showAlert).environmentObject(viewModel)
                 MapButton(voidAction: viewModel.cutting, highlighted: viewModel.checkControl(control: .cut), image: "scissors", showAlert: $showAlert).environmentObject(viewModel)
                 MapButton(voidAction: viewModel.addingVertex, highlighted: viewModel.checkControl(control: .addVertices), image: "plus", showAlert: $showAlert).environmentObject(viewModel)
             }

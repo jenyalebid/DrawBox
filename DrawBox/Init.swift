@@ -17,6 +17,7 @@ enum DrawMode: Int {
     case dmEditAddVertex = 11
     case dmAddHole = 5
     case dmCut = 6
+    case dmUnion = 7
 }
 
 public class InitBox: NSObject, ObservableObject {
@@ -29,11 +30,7 @@ public class InitBox: NSObject, ObservableObject {
     
     @Published var showNotice = false
     @Published var toastText = "Edit Mode"
-//    @Published var isFeatureDeleting = false
 
-//    @Published var isVertexDeleting = false
-//    @Published var isVertexAdding = false
-//    @Published var isAddingHole = false
     
     enum buttonControl: Int {
         case none = 0
@@ -43,6 +40,7 @@ public class InitBox: NSObject, ObservableObject {
         case deleteVertex = 4
         case deleteFeature = 5
         case cut = 6
+        case union = 7
     }
     
     @Published var editMode = buttonControl.none
@@ -87,6 +85,7 @@ public class InitBox: NSObject, ObservableObject {
     var shapeFeatures: [Feature] = []
     
     internal var selectedFeature: Feature?
+//    internal var unionFeature: Feature?
     internal var supportPointFeatures: [Feature] = []
     
     internal var currentVertexFeature: Feature?

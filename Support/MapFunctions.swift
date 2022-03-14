@@ -123,16 +123,14 @@ func splitGeometry(feature: Turf.Feature, line: [CLLocationCoordinate2D]) throws
         var counter = 0
         var collection = try! polygon.boundary().union(with: pLine).polygonize()
         for geometry in collection.geometries {
-            switch geometry {
-            case .polygon(let cutPolygon):
-                for hole in polygon.holes {
-                    if hole.points.reversed() == cutPolygon.exterior.points {
-                        collection.geometries.remove(at: counter)
+            for hole in polygon.holes {
+                let holePolygon = GEOSwift.Polygon(exterior: hole)
+                if try! holePolygon.covers(geometry) {
+                    collection.geometries.remove(at: counter)
+                    if counter != 0 {
                         counter -= 1
                     }
                 }
-            default:
-                assertionFailure()
             }
             counter += 1
         }
@@ -145,6 +143,27 @@ func splitGeometry(feature: Turf.Feature, line: [CLLocationCoordinate2D]) throws
     }
     return nil
 }
+
+//func makeUnionFeature(feature1: Turf.Feature, feature2: Turf.Feature) -> Turf.Feature? {
+//    let geom1 = try! convert_Turf2Geos_Feature(feature1)?.geometry
+//    let geom2 = try! convert_Turf2Geos_Feature(feature2)?.geometry
+//    
+//    let newFeature = GEOSwift.Feature(geometry: try! geom1?.union(with: geom2!))
+//    
+//    return convertGeosToTurf(feature: newFeature)
+//    
+////    switch geom1.geometry {
+////    case .polygon(let polygon1):
+////        switch geom2.geometry {
+////        case .polygon(let polygon2):
+////
+////        default:
+////            assertionFailure()
+////        }
+////    default:
+////        assertionFailure()
+////    }
+//}
 
 func findVertexOn(feature: Turf.Feature, addingPoint point: LocationCoordinate2D, threshold: Double, map: MapView) throws -> (Int?, GPoint?) {
     let pgeom = try GGeometry(wkt: "POINT(\(point.longitude) \(point.latitude))")
