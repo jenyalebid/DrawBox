@@ -56,6 +56,7 @@ public class DrawBox: DisplayBox {
             removeSupportFeatures()
             break
         case .dmUnion:
+            removeSupportFeatures()
             break
         case .dmNONE:
             return
@@ -84,7 +85,7 @@ public class DrawBox: DisplayBox {
         case .dmCut:
             addCut()
         case .dmUnion:
-            break
+            makeUnion()
         case .dmNONE:
             return
         }
@@ -120,15 +121,14 @@ public class DrawBox: DisplayBox {
         case .dmAddShape:
             addLinePoint(locationCoord)
         case .dmAddHole:
-            break
-//            insideSelectedPolygon(gesture) { result in
-//                if result {
-//                    self.addLinePoint(locationCoord)
-//                }
-//                else {
-//                    self.showNotice = true
-//                }
-//            }
+            insideSelectedPolygon(gesture) { result in
+                if result {
+                    self.addLinePoint(locationCoord)
+                }
+                else {
+                    self.showNotice = true
+                }
+            }
         case .dmEditAddVertex:
             addPointToSelectedFeature(locationCoord)
         case .dmCut:
@@ -244,12 +244,6 @@ public class DrawBox: DisplayBox {
                                          "ID": JSONValue(UUID().uuidString)]
                 updateMapLines(feature: newFeature)
             case .polygon(let polygon):
-                
-//                newFeature = Feature(geometry: Polygon(outerRing: Ring(coordinates: outerArray), innerRings: ringArray))
-//                newFeature.properties = selectedFeature!.properties
-//                shapeFeatures[idx] = newFeature
-//                updateMapPolygons()
-                
                 let turfPolygon = convert_Geos2Turf_Polygon(polygon)
                 var newFeature = Feature(geometry: Polygon(outerRing: turfPolygon.outerRing, innerRings: turfPolygon.innerRings))
                 newFeature.properties = ["TYPE": "Polygon",
@@ -270,12 +264,9 @@ public class DrawBox: DisplayBox {
         }
         else {
             removeSupportPoints()
-            createEditingVertex4SelectedFeature()
+            createEditingVerticies()
             return false
         }
-//        if editMode == .cut {
-//            editMode = .none
-//        }
         return true
     }
 
@@ -322,22 +313,30 @@ public class DrawBox: DisplayBox {
             editMode = .none
         }
         removeSupportPoints()
-        createEditingVertex4SelectedFeature()
+        createEditingVerticies()
     }
     
-//    func makeUnion() {
-//        guard selectedFeature != nil && unionFeature != nil else {
-//            return
-//        }
-//        let newFeature = makeUnionFeature(feature1: selectedFeature!, feature2: unionFeature!)
-//
-//        shapeFeatures.remove(at: getFeatureIndex(feature: selectedFeature!))
-//        shapeFeatures.remove(at: getFeatureIndex(feature: unionFeature!))
-//        selectedFeature = newFeature
-//        updateMapPolygons(feature: newFeature)
-//        let newFeatureCollection = FeatureCollection(features: [selectedFeature!])
-//        updateMapSource(sourceID: selectedSourceIdentifier, features: newFeatureCollection)
-//    }
+    func makeUnion() {
+        guard selectedFeature != nil && unionFeature != nil else {
+            return
+        }
+        if var newFeature = makeUnionFeature(feature1: selectedFeature!, feature2: unionFeature!) {
+            
+//            switch newFeature.geometry {
+//            case .multiPolygon(let multiPolygon):
+//            case .polygon()
+//            }
+            shapeFeatures.remove(at: getFeatureIndex(feature: selectedFeature!))
+            shapeFeatures.remove(at: getFeatureIndex(feature: unionFeature!))
+            newFeature.properties = ["TYPE": "Polygon",
+                                  "ID": JSONValue(UUID().uuidString)]
+            selectedFeature = newFeature
+            updateMapPolygons(feature: newFeature)
+            let newFeatureCollection = FeatureCollection(features: [selectedFeature!])
+            updateMapSource(sourceID: selectedSourceIdentifier, features: newFeatureCollection)
+            createEditingVerticies()
+        }
+    }
     
     func addShape() {
         if supportPointsArray.count < 3 { return }
@@ -370,38 +369,46 @@ public class DrawBox: DisplayBox {
     }
         
     //MARK: - Editing
-    
-    func createEditingVertex4SelectedFeature() {
-        guard selectedFeature != nil else { return }
+    var vertexIndex = 0
+    func createEditingVerticies(feature: Feature? = nil) {
+        var editingFeature = feature
+        if feature == nil {
+            guard selectedFeature != nil else { return }
+            editingFeature = selectedFeature
+            vertexIndex = 0
+        }
+        
         if validateGeometry() {
-            switch selectedFeature?.geometry {
+            switch editingFeature!.geometry {
             case .point(let point):
                 var newFeature = Feature(geometry: .point(point))
                 newFeature.properties = ["INDEX": JSONValue(String(0)),
                                          "CURRENT": JSONValue("0")]
                 supportPointFeatures.append(newFeature)
             case .lineString(let line):
-                var index: Int = 0
                 for coord in line.coordinates {
                     var newFeature = Feature(geometry: .point(Point(coord)))
-                    newFeature.properties = ["INDEX": JSONValue(String(index)),
+                    newFeature.properties = ["INDEX": JSONValue(String(vertexIndex)),
                                              "CURRENT": JSONValue("0")]
-                    index += 1
+                    vertexIndex += 1
                     supportPointFeatures.append(newFeature)
                 }
             case .polygon(let polygon):
-                var index: Int = 0
                 for coordSet in polygon.coordinates {
                     for coord in coordSet {
                         print("Shape Coord:    ", coord)
                         var newFeature = Feature(geometry: .point(Point(coord)))
-                        newFeature.properties = ["INDEX": JSONValue(String(index)),
+                        newFeature.properties = ["INDEX": JSONValue(String(vertexIndex)),
                                                  "CURRENT": JSONValue("0")]
-                        index += 1
+                        vertexIndex += 1
                         supportPointFeatures.append(newFeature)
                     }
-                    index -= 1
+                    vertexIndex -= 1
                     supportPointFeatures.removeLast()
+                }
+            case .multiPolygon(let multiPolygon):
+                for polygon in multiPolygon.polygons {
+                    createEditingVerticies(feature: Feature(geometry: polygon))
                 }
             default:
                 return
@@ -434,7 +441,7 @@ public class DrawBox: DisplayBox {
                 showNotice = true
                 return
             }
-            updateSelectedFeature(vertexIndex: vertexIndex!, newCoord: CLLocationCoordinate2D(latitude: vertexPoint!.y, longitude: vertexPoint!.x), addingPoint: true)
+            updateFeature(vertexIndex: vertexIndex!, newCoord: CLLocationCoordinate2D(latitude: vertexPoint!.y, longitude: vertexPoint!.x), addingPoint: true)
         } catch {
             print("ERROR adding point: \(error)")
         }
@@ -514,7 +521,7 @@ public class DrawBox: DisplayBox {
         let index = currentVertexFeature?.properties?["INDEX"]
         if let index = index, dragView != nil {
             let newCoordinate = mapView.mapboxMap.coordinate(for: dragView!.position)
-            updateSelectedFeature(vertexIndex: Int(index!.rawValue as! String)!, newCoord: newCoordinate)
+            updateFeature(vertexIndex: Int(index!.rawValue as! String)!, newCoord: newCoordinate)
         }
         // to HERE <-
     }
@@ -534,14 +541,18 @@ public class DrawBox: DisplayBox {
         isDragViewMoved = false
     }
     
-    func updateSelectedFeature(vertexIndex: Int, newCoord: CLLocationCoordinate2D? = nil, deletingPoint: Bool = false, addingPoint: Bool = false) {
-        guard selectedFeature != nil else { return }
-//        guard supportPointFeatures.count > vertexIndex else { return }
+    func updateFeature(feature: Feature? = nil, vertexIndex: Int, newCoord: CLLocationCoordinate2D? = nil, deletingPoint: Bool = false, addingPoint: Bool = false) {
+        var editingFeature = feature
+        if feature == nil {
+            guard selectedFeature != nil else { return }
+            editingFeature = selectedFeature!
+        }
         
         isGeometryChanged = true
         var newFeature: Feature?
-        let idx = getFeatureIndex(feature: selectedFeature!)
-        switch selectedFeature!.geometry {
+        let idx = getFeatureIndex(feature: editingFeature!)
+        
+        switch editingFeature!.geometry {
         case .point:
             if deletingPoint {
                 deleteSelectedFeature()
@@ -549,42 +560,55 @@ public class DrawBox: DisplayBox {
             }
             else {
                 newFeature = Feature(geometry: .point(Point(newCoord!)))
-                newFeature!.properties = selectedFeature!.properties
+                newFeature!.properties = editingFeature!.properties
                 pointFeatures[idx] = newFeature!
                 updateMapSource(sourceID: selectedSourceIdentifier, features: FeatureCollection(features: []))
                 updateMapPoints()
             }
         case .lineString:
-            var coordArray = getCoordinates(feature: lineFeatures[idx])
-            if addingPoint {
-                coordArray.insert(newCoord!, at: vertexIndex+1)
+            if let line = updateLine(feature: editingFeature!, vertexIndex: vertexIndex, newCoord: newCoord, deletingPoint: deletingPoint, addingPoint: addingPoint) {
+                newFeature = Feature(geometry: line)
+                newFeature!.properties = editingFeature!.properties
+                lineFeatures[idx] = newFeature!
+                updateMapLines()
             }
-            else if deletingPoint {
-                coordArray.remove(at: vertexIndex)
-                if coordArray.count < 2 {
-                    deleteSelectedFeature()
-                    return
+        case .polygon:
+            if let polygon = updatePolygon(feature: editingFeature!, vertexIndex: vertexIndex, newCoord: newCoord, deletingPoint: deletingPoint, addingPoint: addingPoint) {
+                newFeature = Feature(geometry: polygon)
+                newFeature!.properties = editingFeature!.properties
+                shapeFeatures[idx] = newFeature!
+                updateMapPolygons()
+            }
+        case .multiPolygon(let multiPolygon):
+            var polygons: [Polygon] = []
+            var vertexCount = 0
+            for polygon in multiPolygon.polygons {
+                vertexCount += polygonVertexCount(polygon: polygon) - 1
+                if vertexCount > vertexIndex {
+                    if let updatedPolygon = updatePolygon(feature: Feature(geometry: polygon), vertexIndex: polygonVertexCount(polygon: polygon) - 2, newCoord: newCoord, deletingPoint: deletingPoint, addingPoint: addingPoint) {
+                        polygons.append(updatedPolygon)
+                    }
+                }
+                else {
+                    polygons.append(polygon)
                 }
             }
-            else {
-                coordArray[vertexIndex] = newCoord!
+            if !polygons.isEmpty {
+                newFeature = Feature(geometry: MultiPolygon(polygons))
+                newFeature!.properties = editingFeature!.properties
+                shapeFeatures[idx] = newFeature!
+                updateMapPolygons()
             }
-            newFeature = Feature(geometry: .lineString(LineString(coordArray)))
-            newFeature!.properties = selectedFeature!.properties
-            lineFeatures[idx] = newFeature!
-            updateMapLines()
-        case .polygon:
-            newFeature = updatePolygon(vertexIndex: vertexIndex, newCoord: newCoord, deletingPoint: deletingPoint, addingPoint: addingPoint)
         default:
             assertionFailure()
         }
 
-        guard newFeature != nil else {return}
+        guard newFeature != nil else { return }
         updateSelectedMapFeature(feature: newFeature!)
         
         if addingPoint {
             removeSupportPoints()
-            createEditingVertex4SelectedFeature()
+            createEditingVerticies()
         } else if !deletingPoint {
             var newSupportFeature = Feature(geometry: .point(Point(newCoord!)))
             newSupportFeature.properties = ["INDEX": JSONValue(String(vertexIndex)),
@@ -594,10 +618,39 @@ public class DrawBox: DisplayBox {
         }
     }
     
-    func updatePolygon(vertexIndex: Int, newCoord: CLLocationCoordinate2D? = nil, deletingPoint: Bool = false, addingPoint: Bool = false) -> Feature? {
-        let idx = getFeatureIndex(feature: selectedFeature!)
-        var newFeature: Feature
-        var (modifiedArray, outerArray, innerArray, innerIndex, newIndex) = getAllPolygonCooordinates(feature: shapeFeatures[idx], index: vertexIndex)
+//    func updatePoint(feature: Feature, vertexIndex: Int, newCoord: CLLocationCoordinate2D? = nil, deletingPoint: Bool = false, addingPoint: Bool = false) -> Point? {
+//
+//    }
+    
+    func polygonVertexCount(polygon: Polygon) -> Int {
+        var count = polygon.coordinates[0].count - 1
+        for ring in polygon.innerRings {
+            count += ring.coordinates.count - 1
+        }
+        return count
+    }
+    
+    func updateLine(feature: Feature, vertexIndex: Int, newCoord: CLLocationCoordinate2D? = nil, deletingPoint: Bool = false, addingPoint: Bool = false) -> LineString? {
+        var coordArray = getCoordinates(feature: feature)
+        if addingPoint {
+            coordArray.insert(newCoord!, at: vertexIndex + 1)
+        }
+        else if deletingPoint {
+            coordArray.remove(at: vertexIndex)
+            if coordArray.count < 2 {
+                deleteSelectedFeature()
+                return nil
+            }
+        }
+        else {
+            coordArray[vertexIndex] = newCoord!
+        }
+        
+        return LineString(coordArray)
+    }
+    
+    func updatePolygon(feature: Feature, vertexIndex: Int, newCoord: CLLocationCoordinate2D? = nil, deletingPoint: Bool = false, addingPoint: Bool = false) -> Polygon? {
+        var (modifiedArray, outerArray, innerArray, innerIndex, newIndex) = getAllPolygonCooordinates(feature: feature, index: vertexIndex)
         var coordArray = modifiedArray
         var deleteHole = false
         
@@ -634,13 +687,8 @@ public class DrawBox: DisplayBox {
         for array in innerArray {
             ringArray.append(Ring(coordinates: array))
         }
-    
-        newFeature = Feature(geometry: Polygon(outerRing: Ring(coordinates: outerArray), innerRings: ringArray))
-        newFeature.properties = selectedFeature!.properties
-        shapeFeatures[idx] = newFeature
-        updateMapPolygons()
         
-        return newFeature
+        return Polygon(outerRing: Ring(coordinates: outerArray), innerRings: ringArray)
     }
     
     //MARK: - Delete
@@ -679,9 +727,9 @@ public class DrawBox: DisplayBox {
         if let index = index {
             isGeometryChanged = true
             removeSupportPoints()
-            updateSelectedFeature(vertexIndex: Int(index!.rawValue as! String)!, deletingPoint: true)
+            updateFeature(vertexIndex: Int(index!.rawValue as! String)!, deletingPoint: true)
             isVertexSelected = false
-            createEditingVertex4SelectedFeature()
+            createEditingVerticies()
         }
     }
     
@@ -711,7 +759,7 @@ public class DrawBox: DisplayBox {
             return pointFeatures.firstIndex(where: {feature.properties?["ID"] == $0.properties?["ID"] })!
         case .lineString:
             return lineFeatures.firstIndex(where: {feature.properties?["ID"] == $0.properties?["ID"] })!
-        case .polygon:
+        case .polygon, .multiPolygon:
             return shapeFeatures.firstIndex(where: {feature.properties!["ID"] == $0.properties!["ID"] })!
         default:
             assertionFailure()
@@ -733,6 +781,13 @@ public class DrawBox: DisplayBox {
             if polygon.coordinates[0].count >= 4 {
                 return true
             }
+        case .multiPolygon(let multiPolygon):
+            for polygon in multiPolygon.polygons {
+                if polygon.coordinates[0].count < 4 {
+                    return false
+                }
+            }
+            return true
         default:
             return false
         }
