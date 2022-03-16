@@ -16,15 +16,15 @@ private func convertGeosPointArray2CoordinateArray(_ geosPointArray: [GEOSwift.P
     return result
 }
 
-//func convertGeosToTurf(feature: GEOSwift.Feature) -> Turf.Feature? {
-//    switch feature.geometry {
-//    case .multiPolygon(let multiPolygon):
-//        return Turf.Feature(geometry: convert_Geos2Turf_MultiPolygon(multiPolygon))
-//    default:
-//        assertionFailure()
-//    }
-//    return nil
-//}
+func convertGeosToTurf(feature: GEOSwift.Feature) -> Turf.Feature? {
+    switch feature.geometry {
+    case .multiPolygon(let multiPolygon):
+        return Turf.Feature(geometry: convert_Geos2Turf_MultiPolygon(multiPolygon))
+    default:
+        assertionFailure()
+    }
+    return nil
+}
 
 func convert_Geos2Turf_Point(_ geosPoint: GEOSwift.Point) -> Turf.Point {
     return Turf.Point(LocationCoordinate2D(latitude: geosPoint.y, longitude: geosPoint.x))

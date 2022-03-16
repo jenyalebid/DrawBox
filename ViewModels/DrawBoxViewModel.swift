@@ -73,7 +73,7 @@ class DrawBoxViewModel: ObservableObject {
         drawBox.isEditingStarted.toggle()
         if drawBox.isEditingStarted {
             toggleControl(control: .none)
-            drawBox.createEditingVertex4SelectedFeature()
+            drawBox.createEditingVerticies()
         } else {
             drawBox.clearEditingVertex()
         }

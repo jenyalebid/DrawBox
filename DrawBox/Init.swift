@@ -85,7 +85,7 @@ public class InitBox: NSObject, ObservableObject {
     var shapeFeatures: [Feature] = []
     
     internal var selectedFeature: Feature?
-//    internal var unionFeature: Feature?
+    internal var unionFeature: Feature?
     internal var supportPointFeatures: [Feature] = []
     
     internal var currentVertexFeature: Feature?
