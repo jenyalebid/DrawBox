@@ -292,7 +292,8 @@ public class DrawBox: DisplayBox {
             ringArray.append(Ring(coordinates: array))
         }
 
-        var newFeature = Feature(geometry: .polygon(Polygon(outerRing: Ring(coordinates: outerRing), innerRings: ringArray)))
+        let newPolygon = makeClockwise(polygon: Polygon(outerRing: Ring(coordinates: outerRing), innerRings: ringArray))
+        var newFeature = Feature(geometry: newPolygon)
         newFeature.properties = ["TYPE": "Polygon",
                               "ID": JSONValue(UUID().uuidString)]
         
@@ -350,6 +351,7 @@ public class DrawBox: DisplayBox {
         points.append(supportPointsArray.first!)
         var newFeature = Feature(geometry: .polygon(Polygon([points])))
         newFeature.properties = ["TYPE": "temp"]
+        
         updateMapPolygons(feature: newFeature)
     }
     
@@ -360,12 +362,44 @@ public class DrawBox: DisplayBox {
         if editMode == .addHole {
             deleteSelectedFeature()
         }
-        if var feature = shapeFeatures.last(where: { feature in feature.properties?["TYPE"] == "temp" }) {
-            feature.properties = ["TYPE": "Polygon",
-                                  "ID": JSONValue(UUID().uuidString)]
-            shapeFeatures[shapeFeatures.count - 1] = feature
-            updateMapPolygons()
+        var points = supportPointsArray
+        points.append(supportPointsArray.first!)
+        let polygon = makeClockwise(polygon: Polygon(outerRing: Ring(coordinates: points)))
+        print(polygon.outerRing.area)
+        var feature = Feature(geometry: polygon)
+        feature.properties = ["TYPE": "Polygon",
+                              "ID": JSONValue(UUID().uuidString)]
+        shapeFeatures[shapeFeatures.count - 1] = feature
+        updateMapPolygons()
+        
+//        if var feature = shapeFeatures.last(where: { feature in feature.properties?["TYPE"] == "temp" }) {
+//            feature.properties = ["TYPE": "Polygon",
+//                                  "ID": JSONValue(UUID().uuidString)]
+//            shapeFeatures[shapeFeatures.count - 1] = feature
+//            updateMapPolygons()
+//        }
+    }
+    
+    func makeClockwise(polygon: Polygon) -> Polygon {
+        var innerRings: [Ring] = []
+        var outerRing: [LocationCoordinate2D] = []
+        
+        if polygon.outerRing.area < 0 {
+            outerRing.append(contentsOf: polygon.outerRing.coordinates.reversed())
         }
+        else {
+            outerRing.append(contentsOf: polygon.outerRing.coordinates)
+        }
+        
+        for polygon in polygon.innerRings {
+            if polygon.area > 0 {
+                innerRings.append(Ring(coordinates: polygon.coordinates.reversed()))
+            }
+            else {
+                innerRings.append(Ring(coordinates: polygon.coordinates))
+            }
+        }
+        return Polygon(outerRing: Ring(coordinates: outerRing), innerRings: innerRings)
     }
         
     //MARK: - Editing
@@ -421,6 +455,7 @@ public class DrawBox: DisplayBox {
     func setCurrentVertex(vertexFeature: Feature?) {
         self.currentVertexFeature = vertexFeature
         for (indx, _) in supportPointFeatures.enumerated() {
+            print(indx)
             supportPointFeatures[indx].properties?["CURRENT"] = JSONValue("0")
         }
         if let index = vertexFeature?.properties?["INDEX"] {
@@ -582,11 +617,13 @@ public class DrawBox: DisplayBox {
         case .multiPolygon(let multiPolygon):
             var polygons: [Polygon] = []
             var vertexCount = 0
+            var wasAdded = false
             for polygon in multiPolygon.polygons {
-                vertexCount += polygonVertexCount(polygon: polygon) - 1
-                if vertexCount > vertexIndex {
-                    if let updatedPolygon = updatePolygon(feature: Feature(geometry: polygon), vertexIndex: polygonVertexCount(polygon: polygon) - 2, newCoord: newCoord, deletingPoint: deletingPoint, addingPoint: addingPoint) {
+                vertexCount += polygonVertexCount(polygon: polygon)
+                if vertexCount > vertexIndex && !wasAdded {
+                    if let updatedPolygon = updatePolygon(feature: Feature(geometry: polygon), vertexIndex: abs(vertexCount - vertexIndex - polygonVertexCount(polygon: polygon)), newCoord: newCoord, deletingPoint: deletingPoint, addingPoint: addingPoint) {
                         polygons.append(updatedPolygon)
+                        wasAdded = true
                     }
                 }
                 else {
