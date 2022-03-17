@@ -91,6 +91,8 @@ extension DisplayBox {
     }
     
     func addSelectedFeature(feature: Feature) {
+        guard feature.properties != selectedFeature?.properties else { return }
+
         unionFeature = getOriginalSelectedFeature(feature)
         let newFeatureCollection = FeatureCollection(features: [selectedFeature!, unionFeature!])
         updateMapSource(sourceID: selectedSourceIdentifier, features: newFeatureCollection)

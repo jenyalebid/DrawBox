@@ -20,6 +20,8 @@ func convertGeosToTurf(feature: GEOSwift.Feature) -> Turf.Feature? {
     switch feature.geometry {
     case .multiPolygon(let multiPolygon):
         return Turf.Feature(geometry: convert_Geos2Turf_MultiPolygon(multiPolygon))
+    case .polygon(let polygon):
+        return Turf.Feature(geometry: convert_Geos2Turf_Polygon(polygon))
     default:
         assertionFailure()
     }

@@ -101,16 +101,26 @@ func getPoints(feature: Turf.Feature) throws -> [[GEOSwift.Point]] {
     case .lineString(let line):
         return [try convert_Turf2Geos_LineString(line).points]
     case .polygon(let polygon):
-        let geoPolygon = try convert_Turf2Geos_Polygon(polygon)
-        var allArray: [[GEOSwift.Point]] = [geoPolygon.exterior.points]
-        for hole in geoPolygon.holes {
-            allArray.append(hole.points)
+        return getPolygonPoints(polygon: polygon)
+    case .multiPolygon(let multiPolygon):
+        var pointArray: [[GEOSwift.Point]] = []
+        for polygon in multiPolygon.polygons {
+            pointArray.append(contentsOf: getPolygonPoints(polygon: polygon))
         }
-        return allArray
+        return pointArray
     default:
         assertionFailure()
     }
     return []
+}
+
+func getPolygonPoints(polygon: Turf.Polygon) -> [[GEOSwift.Point]] {
+    let geoPolygon = try! convert_Turf2Geos_Polygon(polygon)
+    var allArray: [[GEOSwift.Point]] = [geoPolygon.exterior.points]
+    for hole in geoPolygon.holes {
+        allArray.append(hole.points)
+    }
+    return allArray
 }
 
 func splitGeometry(feature: Turf.Feature, line: [CLLocationCoordinate2D]) throws -> GEOSwift.GeometryCollection? {

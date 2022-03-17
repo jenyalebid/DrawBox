@@ -318,7 +318,7 @@ public class DrawBox: DisplayBox {
     }
     
     func makeUnion() {
-        guard selectedFeature != nil && unionFeature != nil else {
+        guard (selectedFeature != nil && unionFeature != nil) && (selectedFeature != unionFeature) else {
             return
         }
         if var newFeature = makeUnionFeature(feature1: selectedFeature!, feature2: unionFeature!) {
@@ -332,6 +332,7 @@ public class DrawBox: DisplayBox {
             newFeature.properties = ["TYPE": "Polygon",
                                   "ID": JSONValue(UUID().uuidString)]
             selectedFeature = newFeature
+            unionFeature = nil
             updateMapPolygons(feature: newFeature)
             let newFeatureCollection = FeatureCollection(features: [selectedFeature!])
             updateMapSource(sourceID: selectedSourceIdentifier, features: newFeatureCollection)
@@ -615,23 +616,8 @@ public class DrawBox: DisplayBox {
                 updateMapPolygons()
             }
         case .multiPolygon(let multiPolygon):
-            var polygons: [Polygon] = []
-            var vertexCount = 0
-            var wasAdded = false
-            for polygon in multiPolygon.polygons {
-                vertexCount += polygonVertexCount(polygon: polygon)
-                if vertexCount > vertexIndex && !wasAdded {
-                    if let updatedPolygon = updatePolygon(feature: Feature(geometry: polygon), vertexIndex: abs(vertexCount - vertexIndex - polygonVertexCount(polygon: polygon)), newCoord: newCoord, deletingPoint: deletingPoint, addingPoint: addingPoint) {
-                        polygons.append(updatedPolygon)
-                        wasAdded = true
-                    }
-                }
-                else {
-                    polygons.append(polygon)
-                }
-            }
-            if !polygons.isEmpty {
-                newFeature = Feature(geometry: MultiPolygon(polygons))
+            if let updatedMultiPolygon = updateMultiPolygon(multiPolygon: multiPolygon, vertexIndex: vertexIndex, newCoord: newCoord, deletingPoint: deletingPoint, addingPoint: addingPoint) {
+                newFeature = Feature(geometry: updatedMultiPolygon)
                 newFeature!.properties = editingFeature!.properties
                 shapeFeatures[idx] = newFeature!
                 updateMapPolygons()
@@ -654,6 +640,88 @@ public class DrawBox: DisplayBox {
             updateMapSupportPoints()
         }
     }
+    
+    func separateMultiPolygon(multiPolygon: MultiPolygon, polygon: Polygon) -> (MultiPolygon, Polygon) {
+        var polygons: [Polygon] = []
+        var dePolygon: Polygon? = nil
+        
+        for poly in multiPolygon.polygons {
+            if poly != polygon {
+                polygons.append(poly)
+            }
+            else {
+                dePolygon = poly
+            }
+        }
+        
+        return (MultiPolygon(polygons), Polygon(dePolygon!.coordinates))
+    }
+    
+    func deletePolygonFromMultiPolygon(multiPolygon: MultiPolygon, polygon: Polygon) {
+        let polygons = separateMultiPolygon(multiPolygon: multiPolygon, polygon: polygon).0
+        
+        // return the new polygon. Delete here is only one left?
+    }
+    
+    func updateMultiPolygon(multiPolygon: MultiPolygon, vertexIndex: Int, newCoord: CLLocationCoordinate2D? = nil, deletingPoint: Bool = false, addingPoint: Bool = false) -> MultiPolygon? {
+        var polygons: [Polygon] = []
+        var vertexCount = 0
+        var wasAdded = false
+        var newFeature: Feature?
+        
+        for polygon in multiPolygon.polygons {
+            let polygonVertexCount = polygonVertexCount(polygon: polygon)
+            if deletingPoint && polygonVertexCount <= 3 {
+                
+            }
+            vertexCount += polygonVertexCount
+            
+            if vertexCount > vertexIndex && !wasAdded {
+                if let updatedPolygon = updatePolygon(feature: Feature(geometry: polygon), vertexIndex: abs(vertexCount - vertexIndex - polygonVertexCount), newCoord: newCoord, deletingPoint: deletingPoint, addingPoint: addingPoint) {
+                    polygons.append(updatedPolygon)
+                    wasAdded = true
+                }
+            }
+            else {
+                polygons.append(polygon)
+            }
+        }
+        if !polygons.isEmpty {
+
+        }
+        
+        return MultiPolygon(polygons)
+    }
+    
+    
+//    func deUnionFeature(feature: Feature, coordinates: [[LocationCoordinate2D]]) -> (MultiPolygon, Polygon) {
+//        var polygons: [Polygon] = []
+//        let dePolygon: Polygon
+//
+//        switch feature.geometry {
+//        case .multiPolygon(let multiPolygon):
+//            for polygon in multiPolygon.polygons {
+//                if polygon.coordinates != coordinates {
+//                    polygons.append(polygon)
+//                }
+//                else {
+//                    dePolygon = polygon
+//                }
+//            }
+//        default:
+//            assertionFailure()
+//        }
+//
+////        if polygons.count > 1 {
+////            return (MultiPolygon(polygons), nil)
+////        }
+////        else {
+////            return (nil, polygons.first)
+////        }
+//
+//
+//
+//    }
     
 //    func updatePoint(feature: Feature, vertexIndex: Int, newCoord: CLLocationCoordinate2D? = nil, deletingPoint: Bool = false, addingPoint: Bool = false) -> Point? {
 //
@@ -754,6 +822,8 @@ public class DrawBox: DisplayBox {
             updateMapPolygons()
             clearEditingVertex()
             return
+//        case .multiPolygon(let multiPolygon):
+//            return
         default:
             assertionFailure()
         }
