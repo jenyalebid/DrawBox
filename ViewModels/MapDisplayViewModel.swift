@@ -77,7 +77,7 @@ class MapDisplayViewModel: ObservableObject {
         for item in geometry {
             guard let wkt = item else { return }
             switch wkt.prefix(8) {
-            case "POLYGON(":
+            case "POLYGON ":
                 let geosGeometry = try! GPolygon(wkt: wkt)
                 let turfGeometry = convert_Geos2Turf_Polygon(geosGeometry)
                 features.append(Feature.init(geometry: turfGeometry))
